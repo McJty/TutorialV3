@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "tutorialv3:mysterious_ore_overworld",
+    "tutorialv3:mysterious_ore_nether",
+    "tutorialv3:mysterious_ore_end",
+    "tutorialv3:mysterious_ore_deepslate"
+  ]
+}
