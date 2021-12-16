@@ -21,11 +21,13 @@ public class TutItemTags extends ItemTagsProvider {
                 .add(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get())
                 .add(Registration.MYSTERIOUS_ORE_END_ITEM.get())
                 .add(Registration.MYSTERIOUS_ORE_DEEPSLATE_ITEM.get());
-//        tag(Registration.MYSTERIOUS_ORE_ITEM)
-//                .add(Registration.MYSTERIOUS_ORE_OVERWORLD_ITEM.get())
-//                .add(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get())
-//                .add(Registration.MYSTERIOUS_ORE_END_ITEM.get())
-//                .add(Registration.MYSTERIOUS_ORE_DEEPSLATE_ITEM.get());
+        tag(Tags.Items.INGOTS)
+                .add(Registration.MYSTERIOUS_INGOT.get());
+        tag(Registration.MYSTERIOUS_ORE_ITEM)
+                .add(Registration.MYSTERIOUS_ORE_OVERWORLD_ITEM.get())
+                .add(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get())
+                .add(Registration.MYSTERIOUS_ORE_END_ITEM.get())
+                .add(Registration.MYSTERIOUS_ORE_DEEPSLATE_ITEM.get());
     }
 
     @Override

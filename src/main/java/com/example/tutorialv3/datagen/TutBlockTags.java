@@ -32,11 +32,11 @@ public class TutBlockTags extends BlockTagsProvider {
                 .add(Registration.MYSTERIOUS_ORE_END.get())
                 .add(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
 
-//        tag(Registration.MYSTERIOUS_ORE)
-//                .add(Registration.MYSTERIOUS_ORE_OVERWORLD.get())
-//                .add(Registration.MYSTERIOUS_ORE_NETHER.get())
-//                .add(Registration.MYSTERIOUS_ORE_END.get())
-//                .add(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
+        tag(Registration.MYSTERIOUS_ORE)
+                .add(Registration.MYSTERIOUS_ORE_OVERWORLD.get())
+                .add(Registration.MYSTERIOUS_ORE_NETHER.get())
+                .add(Registration.MYSTERIOUS_ORE_END.get())
+                .add(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
     }
 
     @Override

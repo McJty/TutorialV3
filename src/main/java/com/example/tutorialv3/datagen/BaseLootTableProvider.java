@@ -81,7 +81,7 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
                                 LootItem.lootTableItem(block)
                                         .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
                                                 .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))),
-                        LootItem.lootTableItem(lootItem)
+                                LootItem.lootTableItem(lootItem)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)))
                                         .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 1))
                                         .apply(ApplyExplosionDecay.explosionDecay())

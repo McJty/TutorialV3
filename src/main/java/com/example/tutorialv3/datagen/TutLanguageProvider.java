@@ -21,5 +21,8 @@ public class TutLanguageProvider extends LanguageProvider {
         add(Registration.MYSTERIOUS_ORE_NETHER.get(), "Mysterious ore");
         add(Registration.MYSTERIOUS_ORE_END.get(), "Mysterious ore");
         add(Registration.MYSTERIOUS_ORE_DEEPSLATE.get(), "Mysterious ore");
+
+        add(Registration.RAW_MYSTERIOUS_CHUNK.get(), "Mysterious Raw Chunk");
+        add(Registration.MYSTERIOUS_INGOT.get(), "Mysterious Ingot");
     }
 }
