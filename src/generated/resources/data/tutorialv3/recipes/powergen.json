@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tutorialv3",
+  "pattern": [
+    "mmm",
+    "x#x",
+    "#x#"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:dusts/redstone"
+    },
+    "#": {
+      "tag": "forge:ingots/iron"
+    },
+    "m": {
+      "item": "tutorialv3:mysterious_ingot"
+    }
+  },
+  "result": {
+    "item": "tutorialv3:powergen"
+  }
+}

@@ -3,7 +3,10 @@
   "block.tutorialv3.mysterious_ore_end": "Mysterious ore",
   "block.tutorialv3.mysterious_ore_nether": "Mysterious ore",
   "block.tutorialv3.mysterious_ore_overworld": "Mysterious ore",
+  "block.tutorialv3.powergen": "Power generator",
   "item.tutorialv3.mysterious_ingot": "Mysterious Ingot",
   "item.tutorialv3.raw_mysterious_chunk": "Mysterious Raw Chunk",
-  "itemGroup.tutorialv3": "Tutorial"
+  "itemGroup.tutorialv3": "Tutorial",
+  "message.powergen": "Power generator generating %s per tick!",
+  "screen.tutorial.powergen": "Power generator"
 }
