@@ -1,4 +1,5 @@
 {
+  "block.tutorialv3.generator": "Generator",
   "block.tutorialv3.mysterious_ore_deepslate": "Mysterious ore",
   "block.tutorialv3.mysterious_ore_end": "Mysterious ore",
   "block.tutorialv3.mysterious_ore_nether": "Mysterious ore",
@@ -7,6 +8,7 @@
   "item.tutorialv3.mysterious_ingot": "Mysterious Ingot",
   "item.tutorialv3.raw_mysterious_chunk": "Mysterious Raw Chunk",
   "itemGroup.tutorialv3": "Tutorial",
+  "message.generator": "Generate ores from ingots!",
   "message.powergen": "Power generator generating %s per tick!",
   "screen.tutorial.powergen": "Power generator"
 }

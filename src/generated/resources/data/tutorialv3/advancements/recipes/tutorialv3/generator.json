@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "tutorialv3:generator"
+    ]
+  },
+  "criteria": {
+    "mysterious": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tutorialv3:mysterious_ingot"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tutorialv3:generator"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "mysterious",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -17,12 +17,14 @@ public class TutBlockTags extends BlockTagsProvider {
     @Override
     protected void addTags() {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(Registration.GENERATOR.get())
                 .add(Registration.POWERGEN.get())
                 .add(Registration.MYSTERIOUS_ORE_OVERWORLD.get())
                 .add(Registration.MYSTERIOUS_ORE_NETHER.get())
                 .add(Registration.MYSTERIOUS_ORE_END.get())
                 .add(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
         tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(Registration.GENERATOR.get())
                 .add(Registration.POWERGEN.get())
                 .add(Registration.MYSTERIOUS_ORE_OVERWORLD.get())
                 .add(Registration.MYSTERIOUS_ORE_NETHER.get())

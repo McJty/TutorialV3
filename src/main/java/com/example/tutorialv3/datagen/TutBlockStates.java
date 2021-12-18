@@ -8,8 +8,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import static com.example.tutorialv3.client.GeneratorModelLoader.GENERATOR_LOADER;
 
 public class TutBlockStates extends BlockStateProvider {
 
@@ -19,11 +22,20 @@ public class TutBlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+        registerGenerator();
         registerPowergen();
         simpleBlock(Registration.MYSTERIOUS_ORE_OVERWORLD.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_NETHER.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_END.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
+    }
+
+    private void registerGenerator() {
+        BlockModelBuilder generatorModel = models().getBuilder(Registration.GENERATOR.get().getRegistryName().getPath())
+                .parent(models().getExistingFile(mcLoc("cube")))
+                .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(GENERATOR_LOADER, blockModelBuilder, helper) { })
+                .end();
+        directionalBlock(Registration.GENERATOR.get(), generatorModel);
     }
 
     private void registerPowergen() {

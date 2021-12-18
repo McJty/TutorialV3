@@ -21,6 +21,16 @@ public class TutRecipes extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 
+        ShapedRecipeBuilder.shaped(Registration.GENERATOR.get())
+                .pattern("mxm")
+                .pattern("x#x")
+                .pattern("#x#")
+                .define('x', Tags.Items.GEMS_DIAMOND)
+                .define('#', Tags.Items.INGOTS_IRON)
+                .define('m', Registration.MYSTERIOUS_INGOT.get())
+                .group("tutorialv3")
+                .unlockedBy("mysterious", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.MYSTERIOUS_INGOT.get()))
+                .save(consumer);
         ShapedRecipeBuilder.shaped(Registration.POWERGEN.get())
                 .pattern("mmm")
                 .pattern("x#x")

@@ -5,6 +5,7 @@ import com.example.tutorialv3.setup.Registration;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
+import static com.example.tutorialv3.blocks.GeneratorBlock.MESSAGE_GENERATOR;
 import static com.example.tutorialv3.blocks.PowergenBlock.MESSAGE_POWERGEN;
 import static com.example.tutorialv3.blocks.PowergenBlock.SCREEN_TUTORIAL_POWERGEN;
 import static com.example.tutorialv3.setup.ModSetup.TAB_NAME;
@@ -19,8 +20,10 @@ public class TutLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup." + TAB_NAME, "Tutorial");
         add(MESSAGE_POWERGEN, "Power generator generating %s per tick!");
+        add(MESSAGE_GENERATOR, "Generate ores from ingots!");
         add(SCREEN_TUTORIAL_POWERGEN, "Power generator");
 
+        add(Registration.GENERATOR.get(), "Generator");
         add(Registration.POWERGEN.get(), "Power generator");
 
         add(Registration.MYSTERIOUS_ORE_OVERWORLD.get(), "Mysterious ore");

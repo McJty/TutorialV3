@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "tutorialv3:block/generator",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "tutorialv3:block/generator"
+    },
+    "facing=north": {
+      "model": "tutorialv3:block/generator",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "tutorialv3:block/generator",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "tutorialv3:block/generator",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "tutorialv3:block/generator",
+      "x": 90,
+      "y": 90
+    }
+  }
+}
