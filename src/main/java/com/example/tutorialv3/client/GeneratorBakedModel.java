@@ -1,5 +1,6 @@
 package com.example.tutorialv3.client;
 
+import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.GeneratorBE;
 import com.example.tutorialv3.blocks.GeneratorBlock;
 import com.example.tutorialv3.varia.ClientTools;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.model.QuadTransformer;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -41,6 +43,12 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
     private final ItemOverrides overrides;
     private final ItemTransforms itemTransforms;
 
+    /**
+     * @param modelState represents the transformation (orientation) of our model. This is generated from the FACING property that our blockstate uses
+     * @param spriteGetter gives a way to convert materials to actual sprites on the main atlas
+     * @param overrides this is used for using this baked model when it is rendered in an inventory (as an item)
+     * @param itemTransforms these represent the transforms to use for the item model
+     */
     public GeneratorBakedModel(ModelState modelState, Function<Material, TextureAtlasSprite> spriteGetter,
                                ItemOverrides overrides, ItemTransforms itemTransforms) {
         this.modelState = modelState;
@@ -55,6 +63,18 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
         return false;
     }
 
+    /**
+     * Whenever a chunk where our block is in needs to be rerendered this method is called to return the quads (polygons)
+     * for our model. Typically this will be called seven times: one time for every direction and one time in general.
+     * If you have a block that is solid at one of the six sides it can be a good idea to render that face only for that
+     * direction. That way Minecraft knows that it can get rid of that face when another solid block is adjacent to that.
+     * All faces or quads that are generated for side == null are not going to be culled away like that
+     * @param state the blockstate for our block
+     * @param side the six directions or null for quads that are not at a specific direction
+     * @param rand random generator that you can use to add variations to your model (usually for textures)
+     * @param extraData this represents the data that is given to use from our block entity
+     * @return a list of quads
+     */
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
@@ -65,12 +85,15 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
             return Collections.emptyList();
         }
 
+        // Get the data from our block entity
         boolean generating = TRUE == extraData.getData(GeneratorBE.GENERATING);
         boolean collecting = TRUE == extraData.getData(GeneratorBE.COLLECTING);
         boolean actuallyGenerating = TRUE == extraData.getData(GeneratorBE.ACTUALLY_GENERATING);
 
+        // Generate the quads from the block (ore) that we are generating
         var quads = getQuadsForGeneratingBlock(state, rand, extraData, layer);
 
+        // ModelKey represents a unique configuration. We can use this to get our cached quads
         ModelKey key = new ModelKey(generating, collecting, actuallyGenerating, modelState);
         quads.addAll(quadCache.get(key));
 
@@ -88,6 +111,10 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
         quadCache.put(new ModelKey(false, true, true, modelState), generateQuads(false, true, true));
     }
 
+    /**
+     * Generate the quads for a given configuration. This is done in the constructor in order to populate
+     * our quad cache.
+     */
     @NotNull
     private List<BakedQuad> generateQuads(boolean generating, boolean collecting, boolean actuallyGenerating) {
         var quads = new ArrayList<BakedQuad>();
@@ -136,6 +163,9 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
         return quads;
     }
 
+    /**
+     * Get the quads from the block we are generating.
+     */
     private List<BakedQuad> getQuadsForGeneratingBlock(@Nullable BlockState state, @NotNull Random rand, @NotNull IModelData extraData, RenderType layer) {
         var quads = new ArrayList<BakedQuad>();
         BlockState generatingBlock = extraData.getData(GeneratorBE.GENERATING_BLOCK);
@@ -148,6 +178,7 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
                     Transformation translate = transformGeneratingBlock(facing, rotation);
                     QuadTransformer transformer = new QuadTransformer(translate);
 
+                    // Get the quads for every side, transform it and add it to the list of quads
                     for (Direction s : Direction.values()) {
                         List<BakedQuad> modelQuads = model.getQuads(generatingBlock, s, rand, EmptyModelData.INSTANCE);
                         for (BakedQuad quad : modelQuads) {
@@ -155,13 +186,18 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
                         }
                     }
                 } catch (Exception e) {
-                    // Ignore
+                    // In case a certain mod has a bug we don't want to cause everything to crash. Instead we log the problem
+                    TutorialV3.LOGGER.log(Level.ERROR, "A block '" + generatingBlock.getBlock().getRegistryName().toString() + "' caused a crash!");
                 }
             }
         }
         return quads;
     }
 
+    /**
+     * Generate a transform that will transform the ore block that we're generating to a smaller version
+     * that fits nicely into our front panel.
+     */
     @NotNull
     private Transformation transformGeneratingBlock(Direction facing, Transformation rotation) {
         // Note: when composing a transformation like this you have to imagine these transformations in reverse order.

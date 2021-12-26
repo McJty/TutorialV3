@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(TutorialV3.MODID)
 public class TutorialV3 {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "tutorialv3";
 
     public TutorialV3() {
