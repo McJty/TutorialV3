@@ -36,19 +36,30 @@ public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
         }
 
         int brightness = LightTexture.FULL_BRIGHT;
+        // To achieve a pulsating effect we use the current time
         float s = (System.currentTimeMillis() % 1000) / 1000.0f;
         if (s > 0.5f) {
             s = 1.0f - s;
         }
         float scale = 0.1f + s * .3f;
 
+        // Get our texture from the atlas
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(HALO);
+
+        // Always remember to push the current transformation so that you can restore it later
         poseStack.pushPose();
+
+        // Translate to the middle of the block and 1 unit higher
         poseStack.translate(0.5, 1.5, 0.5);
+
+        // Use the orientation of the main camera to make sure the single quad that we are going to render always faces the camera
         Quaternion rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
         poseStack.mulPose(rotation);
+
+        // Actually render the quad in our own custom render type
         VertexConsumer buffer = bufferSource.getBuffer(CustomRenderType.ADD);
         Matrix4f matrix = poseStack.last().pose();
+        // Vertex data has to appear in a specific order:
         buffer.vertex(matrix, -scale, -scale, 0.0f).color(1.0f, 1.0f, 1.0f, 0.3f).uv(sprite.getU0(), sprite.getV0()).uv2(brightness).normal(1,0,0).endVertex();
         buffer.vertex(matrix, -scale, scale, 0.0f).color(1.0f, 1.0f, 1.0f, 0.3f).uv(sprite.getU0(), sprite.getV1()).uv2(brightness).normal(1,0,0).endVertex();
         buffer.vertex(matrix, scale, scale, 0.0f).color(1.0f, 1.0f, 1.0f, 0.3f).uv(sprite.getU1(), sprite.getV1()).uv2(brightness).normal(1,0,0).endVertex();

@@ -31,6 +31,7 @@ public class TutBlockStates extends BlockStateProvider {
     }
 
     private void registerGenerator() {
+        // Using CustomLoaderBuilder we can define a json file for our model that will use our baked model
         BlockModelBuilder generatorModel = models().getBuilder(Registration.GENERATOR.get().getRegistryName().getPath())
                 .parent(models().getExistingFile(mcLoc("cube")))
                 .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(GENERATOR_LOADER, blockModelBuilder, helper) { })
