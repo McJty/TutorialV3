@@ -2,6 +2,7 @@ package com.example.tutorialv3.blocks;
 
 import com.example.tutorialv3.setup.Registration;
 import com.example.tutorialv3.varia.CustomEnergyStorage;
+import com.example.tutorialv3.varia.Tools;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -180,20 +181,11 @@ public class GeneratorBE extends BlockEntity {
                     generatingCounter = 0;
                     // For each of these ores we try to insert it in the output buffer or else throw it on the ground
                     ItemStack remaining = ItemHandlerHelper.insertItem(outputItems, new ItemStack(generatingBlock.getBlock().asItem()), false);
-                    spawnInWorld(remaining);
+                    Tools.spawnInWorld(level, worldPosition, remaining);
                 }
             }
         }
         return areWeGenerating;
-    }
-
-    private void spawnInWorld(ItemStack remaining) {
-        if (!remaining.isEmpty()) {
-            ItemEntity entityitem = new ItemEntity(level, worldPosition.getX(), worldPosition.getY() + 0.5, worldPosition.getZ(), remaining);
-            entityitem.setPickUpDelay(40);
-            entityitem.setDeltaMovement(entityitem.getDeltaMovement().multiply(0, 1, 0));
-            level.addFreshEntity(entityitem);
-        }
     }
 
     @Nonnull

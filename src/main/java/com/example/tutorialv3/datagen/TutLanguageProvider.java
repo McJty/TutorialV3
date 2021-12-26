@@ -33,5 +33,8 @@ public class TutLanguageProvider extends LanguageProvider {
 
         add(Registration.RAW_MYSTERIOUS_CHUNK.get(), "Mysterious Raw Chunk");
         add(Registration.MYSTERIOUS_INGOT.get(), "Mysterious Ingot");
+        add(Registration.THIEF_EGG.get(), "Thief Egg");
+
+        add(Registration.THIEF.get(), "Thief");
     }
 }
