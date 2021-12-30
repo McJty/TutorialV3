@@ -103,6 +103,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(chunkAccess);
     }
 
+    // Make sure this is correctly implemented so that structures and features can use this
     @Override
     public int getBaseHeight(int x, int z, Heightmap.Types types, LevelHeightAccessor levelHeightAccessor) {
         int baseHeight = settings.baseHeight();
@@ -111,6 +112,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return getHeightAt(baseHeight, verticalVariance, horizontalVariance, x, z);
     }
 
+    // Make sure this is correctly implemented so that structures and features can use this
     @Override
     public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor) {
         int y = getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, levelHeightAccessor);
@@ -123,6 +125,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return new NoiseColumn(levelHeightAccessor.getMinBuildHeight(), states);
     }
 
+    // Carvers only work correctly in combination with NoiseBasedChunkGenerator so we keep this empty here
     @Override
     public void applyCarvers(WorldGenRegion level, long seed, BiomeManager biomeManager,
                              StructureFeatureManager featureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving) {
@@ -133,6 +136,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return (x, y, z) -> Climate.target(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
     }
 
+    // This makes sure passive mob spawning works for generated chunks. i.e. mobs that spawn during the creation of chunks themselves
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
         ChunkPos chunkpos = level.getCenter();
