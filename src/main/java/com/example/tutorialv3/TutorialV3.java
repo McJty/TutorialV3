@@ -3,6 +3,7 @@ package com.example.tutorialv3;
 import com.example.tutorialv3.setup.ModSetup;
 import com.example.tutorialv3.setup.ClientSetup;
 import com.example.tutorialv3.setup.Registration;
+import com.example.tutorialv3.worldgen.ores.Ores;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -20,6 +21,7 @@ public class TutorialV3 {
     public TutorialV3() {
 
         // Register the deferred registry
+        ModSetup.setup();
         Registration.init();
 
         // Register the setup method for modloading
