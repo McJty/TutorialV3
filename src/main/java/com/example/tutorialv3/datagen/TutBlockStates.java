@@ -4,6 +4,7 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.setup.Registration;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
@@ -24,10 +25,19 @@ public class TutBlockStates extends BlockStateProvider {
     protected void registerStatesAndModels() {
         registerGenerator();
         registerPowergen();
+        registerPortal();
+
         simpleBlock(Registration.MYSTERIOUS_ORE_OVERWORLD.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_NETHER.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_END.get());
         simpleBlock(Registration.MYSTERIOUS_ORE_DEEPSLATE.get());
+    }
+
+    private void registerPortal() {
+        Block block = Registration.PORTAL_BLOCK.get();
+        ResourceLocation side = modLoc("block/portal_side");
+        ResourceLocation top = modLoc("block/portal_top");
+        simpleBlock(block, models().cube(block.getRegistryName().getPath(), side, top, side, side, side, side));
     }
 
     private void registerGenerator() {

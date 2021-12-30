@@ -1,0 +1,11 @@
+{
+  "type": "tutorialv3:mysterious",
+  "generator": {
+    "type": "tutorialv3:mysterious_chunkgen",
+    "settings": {
+      "base": 65,
+      "verticalvariance": 10,
+      "horizontalvariance": 8
+    }
+  }
+}

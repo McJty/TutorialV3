@@ -1,6 +1,7 @@
 package com.example.tutorialv3.worldgen.ores;
 
 import com.example.tutorialv3.setup.Registration;
+import com.example.tutorialv3.worldgen.dimensions.Dimensions;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -20,6 +21,8 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class Ores {
 
+    public static final int MYSTERIOUS_VEINSIZE = 25;
+    public static final int MYSTERIOUS_AMOUNT = 10;
     public static final int OVERWORLD_VEINSIZE = 5;
     public static final int OVERWORLD_AMOUNT = 3;
     public static final int DEEPSLATE_VEINSIZE = 5;
@@ -31,17 +34,25 @@ public class Ores {
 
     public static final RuleTest IN_ENDSTONE = new TagMatchTest(Tags.Blocks.END_STONES);
 
+    public static PlacedFeature MYSTERIOUS_OREGEN;
     public static PlacedFeature OVERWORLD_OREGEN;
     public static PlacedFeature DEEPSLATE_OREGEN;
     public static PlacedFeature NETHER_OREGEN;
     public static PlacedFeature END_OREGEN;
 
     public static void registerConfiguredFeatures() {
+        OreConfiguration mysteriousConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), MYSTERIOUS_VEINSIZE);
+        MYSTERIOUS_OREGEN = registerPlacedFeature("mysterious_mysterious_ore", Feature.ORE.configured(mysteriousConfig),
+                CountPlacement.of(MYSTERIOUS_AMOUNT),
+                InSquarePlacement.spread(),
+                new DimensionBiomeFilter(key -> key.equals(Dimensions.MYSTERIOUS)),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
+
         OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OVERWORLD_VEINSIZE);
         OVERWORLD_OREGEN = registerPlacedFeature("overworld_mysterious_ore", Feature.ORE.configured(overworldConfig),
                 CountPlacement.of(OVERWORLD_AMOUNT),
                 InSquarePlacement.spread(),
-                BiomeFilter.biome(),
+                new DimensionBiomeFilter(key -> !Dimensions.MYSTERIOUS.equals(key)),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
 
         OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_DEEPSLATE.get().defaultBlockState(), DEEPSLATE_VEINSIZE);
@@ -77,6 +88,7 @@ public class Ores {
         } else if (event.getCategory() == Biome.BiomeCategory.THEEND) {
             event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, END_OREGEN);
         } else {
+            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MYSTERIOUS_OREGEN);
             event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OVERWORLD_OREGEN);
             event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, DEEPSLATE_OREGEN);
         }

@@ -25,6 +25,7 @@ public class TutLanguageProvider extends LanguageProvider {
 
         add(Registration.GENERATOR.get(), "Generator");
         add(Registration.POWERGEN.get(), "Power generator");
+        add(Registration.PORTAL_BLOCK.get(), "Mysterious Portal");
 
         add(Registration.MYSTERIOUS_ORE_OVERWORLD.get(), "Mysterious ore");
         add(Registration.MYSTERIOUS_ORE_NETHER.get(), "Mysterious ore");
