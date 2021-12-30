@@ -19,6 +19,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PortalBlock extends Block {
 
+    // Our block is lower then a normal block. That causes the player to sink in it when he stands on the block
+    // And that in turn causes our 'entityInside' test to detect the player
     private static final VoxelShape SHAPE = Shapes.box(0, 0, 0, 1, .8, 1);
 
     public PortalBlock() {
@@ -33,6 +35,7 @@ public class PortalBlock extends Block {
         return SHAPE;
     }
 
+    // This works because our block isn't a full block
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof ServerPlayer player) {
