@@ -26,10 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PowergenBE extends BlockEntity {
 
-    public static final int POWERGEN_CAPACITY = 50000; // Max capacity
-    public static final int POWERGEN_GENERATE = 60;    // Generation per tick
-    public static final int POWERGEN_SEND = 200;       // Power to send out per tick
-
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
@@ -53,7 +49,7 @@ public class PowergenBE extends BlockEntity {
 
     public void tickServer() {
         if (counter > 0) {
-            energyStorage.addEnergy(POWERGEN_GENERATE);
+            energyStorage.addEnergy(PowergenConfig.POWERGEN_GENERATE.get());
             counter--;
             setChanged();
         }
@@ -85,7 +81,7 @@ public class PowergenBE extends BlockEntity {
                 if (be != null) {
                     boolean doContinue = be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite()).map(handler -> {
                                 if (handler.canReceive()) {
-                                    int received = handler.receiveEnergy(Math.min(capacity.get(), POWERGEN_SEND), false);
+                                    int received = handler.receiveEnergy(Math.min(capacity.get(), PowergenConfig.POWERGEN_SEND.get()), false);
                                     capacity.addAndGet(-received);
                                     energyStorage.consumeEnergy(received);
                                     setChanged();
@@ -154,7 +150,7 @@ public class PowergenBE extends BlockEntity {
     }
 
     private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(POWERGEN_CAPACITY, 0) {
+        return new CustomEnergyStorage(PowergenConfig.POWERGEN_CAPACITY.get(), 0) {
             @Override
             protected void onEnergyChanged() {
                 setChanged();

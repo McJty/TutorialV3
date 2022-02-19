@@ -38,13 +38,8 @@ import java.util.Objects;
 
 public class GeneratorBE extends BlockEntity {
 
-    public static final int COLLECTING_DELAY = 10;
-    public static final int INGOTS_PER_ORE = 10;
     public static final int INPUT_SLOTS = 5;
     public static final int OUTPUT_SLOTS = 1;
-    public static final int ENERGY_CAPACITY = 100000;
-    public static final int ENERGY_RECEIVE = 1000;
-    public static final int ENERGY_GENERATE = 500;
 
     // The properties that are used to communicate data to the baked model (GeneratorBakedModel)
     public static final ModelProperty<BlockState> GENERATING_BLOCK = new ModelProperty<>();
@@ -114,7 +109,7 @@ public class GeneratorBE extends BlockEntity {
         if (collecting) {
             collectingTicker--;
             if (collectingTicker <= 0) {
-                collectingTicker = COLLECTING_DELAY;
+                collectingTicker = GeneratorConfig.COLLECTING_DELAY.get();
                 collectItems();
             }
         }
@@ -160,14 +155,14 @@ public class GeneratorBE extends BlockEntity {
             return false;
         }
         // Not enough energy, don't even try
-        if (energy.getEnergyStored() < ENERGY_GENERATE) {
+        if (energy.getEnergyStored() < GeneratorConfig.ENERGY_GENERATE.get()) {
             return false;
         }
         boolean areWeGenerating = false;
         for (int i = 0; i < inputItems.getSlots() ; i++) {
             ItemStack item = inputItems.getStackInSlot(i);
             if (!item.isEmpty()) {
-                energy.consumeEnergy(ENERGY_GENERATE);
+                energy.consumeEnergy(GeneratorConfig.ENERGY_GENERATE.get());
                 // The API documentation from getStackInSlot says you are not allowed to modify the itemstacks returned
                 // by getStackInSlot. That's why we make a copy here
                 item = item.copy();
@@ -177,7 +172,7 @@ public class GeneratorBE extends BlockEntity {
                 generatingCounter++;
                 areWeGenerating = true;
                 setChanged();
-                if (generatingCounter >= INGOTS_PER_ORE) {
+                if (generatingCounter >= GeneratorConfig.INGOTS_PER_ORE.get()) {
                     generatingCounter = 0;
                     // For each of these ores we try to insert it in the output buffer or else throw it on the ground
                     ItemStack remaining = ItemHandlerHelper.insertItem(outputItems, new ItemStack(generatingBlock.getBlock().asItem()), false);
@@ -232,7 +227,7 @@ public class GeneratorBE extends BlockEntity {
     }
 
     private CustomEnergyStorage createEnergyStorage() {
-        return new CustomEnergyStorage(ENERGY_CAPACITY, ENERGY_RECEIVE) {
+        return new CustomEnergyStorage(GeneratorConfig.ENERGY_CAPACITY.get(), GeneratorConfig.ENERGY_RECEIVE.get()) {
             @Override
             protected void onEnergyChanged() {
                 setChanged();

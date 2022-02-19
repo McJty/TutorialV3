@@ -1,5 +1,6 @@
 package com.example.tutorialv3;
 
+import com.example.tutorialv3.setup.Config;
 import com.example.tutorialv3.setup.ModSetup;
 import com.example.tutorialv3.setup.ClientSetup;
 import com.example.tutorialv3.setup.Registration;
@@ -23,6 +24,7 @@ public class TutorialV3 {
         // Register the deferred registry
         ModSetup.setup();
         Registration.init();
+        Config.register();
 
         // Register the setup method for modloading
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();

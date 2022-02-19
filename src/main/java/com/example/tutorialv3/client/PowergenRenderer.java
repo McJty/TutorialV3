@@ -2,6 +2,7 @@ package com.example.tutorialv3.client;
 
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.PowergenBE;
+import com.example.tutorialv3.blocks.PowergenConfig;
 import com.example.tutorialv3.setup.Registration;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -41,7 +42,7 @@ public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
         if (s > 0.5f) {
             s = 1.0f - s;
         }
-        float scale = 0.1f + s * .3f;
+        float scale = 0.1f + s * (float)(double)PowergenConfig.RENDER_SCALE.get();
 
         // Get our texture from the atlas
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(HALO);

@@ -21,17 +21,6 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class Ores {
 
-    public static final int MYSTERIOUS_VEINSIZE = 25;
-    public static final int MYSTERIOUS_AMOUNT = 10;
-    public static final int OVERWORLD_VEINSIZE = 5;
-    public static final int OVERWORLD_AMOUNT = 3;
-    public static final int DEEPSLATE_VEINSIZE = 5;
-    public static final int DEEPSLATE_AMOUNT = 3;
-    public static final int NETHER_VEINSIZE = 5;
-    public static final int NETHER_AMOUNT = 3;
-    public static final int END_VEINSIZE = 10;
-    public static final int END_AMOUNT = 6;
-
     public static final RuleTest IN_ENDSTONE = new TagMatchTest(Tags.Blocks.END_STONES);
 
     public static PlacedFeature MYSTERIOUS_OREGEN;
@@ -41,37 +30,37 @@ public class Ores {
     public static PlacedFeature END_OREGEN;
 
     public static void registerConfiguredFeatures() {
-        OreConfiguration mysteriousConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), MYSTERIOUS_VEINSIZE);
+        OreConfiguration mysteriousConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.MYSTERIOUS_VEINSIZE.get());
         MYSTERIOUS_OREGEN = registerPlacedFeature("mysterious_mysterious_ore", Feature.ORE.configured(mysteriousConfig),
-                CountPlacement.of(MYSTERIOUS_AMOUNT),
+                CountPlacement.of(OresConfig.MYSTERIOUS_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 new DimensionBiomeFilter(key -> key.equals(Dimensions.MYSTERIOUS)),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
 
-        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OVERWORLD_VEINSIZE);
+        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.OVERWORLD_VEINSIZE.get());
         OVERWORLD_OREGEN = registerPlacedFeature("overworld_mysterious_ore", Feature.ORE.configured(overworldConfig),
-                CountPlacement.of(OVERWORLD_AMOUNT),
+                CountPlacement.of(OresConfig.OVERWORLD_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 new DimensionBiomeFilter(key -> !Dimensions.MYSTERIOUS.equals(key)),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
 
-        OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_DEEPSLATE.get().defaultBlockState(), DEEPSLATE_VEINSIZE);
+        OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_DEEPSLATE.get().defaultBlockState(), OresConfig.DEEPSLATE_VEINSIZE.get());
         DEEPSLATE_OREGEN = registerPlacedFeature("deepslate_mysterious_ore", Feature.ORE.configured(deepslateConfig),
-                CountPlacement.of(DEEPSLATE_AMOUNT),
+                CountPlacement.of(OresConfig.DEEPSLATE_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
                 HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(64)));
 
-        OreConfiguration netherConfig = new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_NETHER.get().defaultBlockState(), NETHER_VEINSIZE);
+        OreConfiguration netherConfig = new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_NETHER.get().defaultBlockState(), OresConfig.NETHER_VEINSIZE.get());
         NETHER_OREGEN = registerPlacedFeature("nether_mysterious_ore", Feature.ORE.configured(netherConfig),
-                CountPlacement.of(NETHER_AMOUNT),
+                CountPlacement.of(OresConfig.NETHER_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
 
-        OreConfiguration endConfig = new OreConfiguration(IN_ENDSTONE, Registration.MYSTERIOUS_ORE_END.get().defaultBlockState(), END_VEINSIZE);
+        OreConfiguration endConfig = new OreConfiguration(IN_ENDSTONE, Registration.MYSTERIOUS_ORE_END.get().defaultBlockState(), OresConfig.END_VEINSIZE.get());
         END_OREGEN = registerPlacedFeature("end_mysterious_ore", Feature.ORE.configured(endConfig),
-                CountPlacement.of(END_AMOUNT),
+                CountPlacement.of(OresConfig.END_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100)));
