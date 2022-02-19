@@ -1,6 +1,8 @@
 package com.example.tutorialv3.datagen;
 
 import com.example.tutorialv3.TutorialV3;
+import com.example.tutorialv3.manasystem.client.KeyBindings;
+import com.example.tutorialv3.manasystem.network.PacketGatherMana;
 import com.example.tutorialv3.setup.Registration;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -37,5 +39,9 @@ public class TutLanguageProvider extends LanguageProvider {
         add(Registration.THIEF_EGG.get(), "Thief Egg");
 
         add(Registration.THIEF.get(), "Thief");
+
+        add(KeyBindings.KEY_CATEGORIES_TUTORIAL, "Tutorial Keys");
+        add(KeyBindings.KEY_GATHER_MANA, "Gather Mana");
+        add(PacketGatherMana.MESSAGE_NO_MANA, "No mana on this location");
     }
 }

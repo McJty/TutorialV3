@@ -11,7 +11,10 @@
   "item.tutorialv3.raw_mysterious_chunk": "Mysterious Raw Chunk",
   "item.tutorialv3.thief": "Thief Egg",
   "itemGroup.tutorialv3": "Tutorial",
+  "key.categories.tutorial": "Tutorial Keys",
+  "key.gatherMana": "Gather Mana",
   "message.generator": "Generate ores from ingots!",
+  "message.nomana": "No mana on this location",
   "message.powergen": "Power generator generating %s per tick!",
   "screen.tutorial.powergen": "Power generator"
 }
