@@ -5,7 +5,6 @@ import com.example.tutorialv3.entities.ThiefEntity;
 import com.example.tutorialv3.manasystem.data.ManaEvents;
 import com.example.tutorialv3.worldgen.dimensions.Dimensions;
 import com.example.tutorialv3.worldgen.ores.Ores;
-import com.example.tutorialv3.worldgen.structures.Structures;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +32,6 @@ public class ModSetup {
     public static void setup() {
         IEventBus bus = MinecraftForge.EVENT_BUS;
         bus.addListener(Ores::onBiomeLoadingEvent);
-        bus.addListener(EventPriority.NORMAL, Structures::addDimensionalSpacing);
-        bus.addListener(EventPriority.NORMAL, Structures::setupStructureSpawns);
         bus.addGenericListener(Entity.class, ManaEvents::onAttachCapabilitiesPlayer);
         bus.addListener(ManaEvents::onPlayerCloned);
         bus.addListener(ManaEvents::onRegisterCapabilities);
@@ -44,8 +41,6 @@ public class ModSetup {
     public static void init(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             Ores.registerConfiguredFeatures();
-            Structures.setupStructures();
-            Structures.registerConfiguredStructures();
             Dimensions.register();
         });
         Messages.register();

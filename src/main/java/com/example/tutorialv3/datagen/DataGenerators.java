@@ -18,6 +18,8 @@ public class DataGenerators {
             TutBlockTags blockTags = new TutBlockTags(generator, event.getExistingFileHelper());
             generator.addProvider(blockTags);
             generator.addProvider(new TutItemTags(generator, blockTags, event.getExistingFileHelper()));
+            generator.addProvider(new TutBiomeTags(generator, event.getExistingFileHelper()));
+            generator.addProvider(new TutStructureSetTags(generator, event.getExistingFileHelper()));
         }
         if (event.includeClient()) {
             generator.addProvider(new TutBlockStates(generator, event.getExistingFileHelper()));

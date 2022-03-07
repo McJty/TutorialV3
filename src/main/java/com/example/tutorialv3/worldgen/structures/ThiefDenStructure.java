@@ -1,21 +1,17 @@
 package com.example.tutorialv3.worldgen.structures;
 
-import com.example.tutorialv3.TutorialV3;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.feature.structures.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import org.apache.logging.log4j.Level;
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 
 import java.util.Optional;
 
@@ -60,24 +56,12 @@ public class ThiefDenStructure extends StructureFeature<JigsawConfiguration> {
         // Turns the chunk coordinates into actual coordinates we can use. (center of that chunk)
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
-        var newConfig = new JigsawConfiguration(
-                () -> context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                        .get(new ResourceLocation(TutorialV3.MODID, "thiefden/start_pool")),
-                5       // In our case our structure is 1 chunk only but by using 5 here it can be replaced with something larger in datapacks
-        );
-
-        // Create a new context with the new config that has our json pool. We will pass this into JigsawPlacement.addPieces
-        var newContext = Structures.createContextWithConfig(context, newConfig);
-        // Last 'true' parameter means the structure will automatically be placed at ground level
-        var generator = JigsawPlacement.addPieces(newContext,
-                        PoolElementStructurePiece::new, blockpos, false, true);
-
-        if (generator.isPresent()) {
-            // Debugging help to quickly find our structures
-            TutorialV3.LOGGER.log(Level.INFO, "Thiefden at " + blockpos);
-        }
-
         // Return the pieces generator that is now set up so that the game runs it when it needs to create the layout of structure pieces.
-        return generator;
+        return JigsawPlacement.addPieces(
+                context,
+                PoolElementStructurePiece::new,
+                blockpos,
+                false,
+                true);
     }
 }

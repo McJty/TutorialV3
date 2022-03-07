@@ -1,12 +1,15 @@
 package com.example.tutorialv3.worldgen.dimensions;
 
-import com.example.tutorialv3.TutorialV3;
+import com.example.tutorialv3.setup.Registration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -17,7 +20,11 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -32,16 +39,22 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
 
     public static final Codec<MysteriousChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(MysteriousChunkGenerator::getBiomeRegistry),
+                    RegistryOps.retrieveRegistry(Registry.STRUCTURE_SET_REGISTRY).forGetter(MysteriousChunkGenerator::getStructureSetRegistry),
+                    RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(MysteriousChunkGenerator::getBiomeRegistry),
                     SETTINGS_CODEC.fieldOf("settings").forGetter(MysteriousChunkGenerator::getTutorialSettings)
             ).apply(instance, MysteriousChunkGenerator::new));
 
     private final Settings settings;
 
-    public MysteriousChunkGenerator(Registry<Biome> registry, Settings settings) {
-        super(new MysteriousBiomeProvider(registry), new StructureSettings(false));
+    public MysteriousChunkGenerator(Registry<StructureSet> structureSetRegistry, Registry<Biome> registry, Settings settings) {
+        super(structureSetRegistry, getSet(structureSetRegistry), new MysteriousBiomeProvider(registry));
         this.settings = settings;
-        TutorialV3.LOGGER.info("Chunk generator settings: " + settings.baseHeight() + ", " + settings.horizontalVariance() + ", " + settings.verticalVariance());
+    }
+
+    private static Optional<HolderSet<StructureSet>> getSet(Registry<StructureSet> structureSetRegistry) {
+        HolderSet.Named<StructureSet> structureSet = structureSetRegistry.getOrCreateTag(TagKey.create(Registry.STRUCTURE_SET_REGISTRY,
+                Registration.RL_MYSTERIOUS_DIMENSION_SET));
+        return Optional.of(structureSet);
     }
 
     public Settings getTutorialSettings() {
@@ -50,6 +63,10 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
 
     public Registry<Biome> getBiomeRegistry() {
         return ((MysteriousBiomeProvider)biomeSource).getBiomeRegistry();
+    }
+
+    public Registry<StructureSet> getStructureSetRegistry() {
+        return structureSets;
     }
 
     @Override
@@ -95,7 +112,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
 
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new MysteriousChunkGenerator(getBiomeRegistry(), settings);
+        return new MysteriousChunkGenerator(getStructureSetRegistry(), getBiomeRegistry(), settings);
     }
 
     @Override
@@ -133,14 +150,15 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
 
     @Override
     public Climate.Sampler climateSampler() {
-        return (x, y, z) -> Climate.target(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+        return new Climate.Sampler(DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0),
+                DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), Collections.emptyList());
     }
 
     // This makes sure passive mob spawning works for generated chunks. i.e. mobs that spawn during the creation of chunks themselves
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
         ChunkPos chunkpos = level.getCenter();
-        Biome biome = level.getBiome(chunkpos.getWorldPosition().atY(level.getMaxBuildHeight() - 1));
+        Holder<Biome> biome = level.getBiome(chunkpos.getWorldPosition().atY(level.getMaxBuildHeight() - 1));
         WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.seedUniquifier()));
         worldgenrandom.setDecorationSeed(level.getSeed(), chunkpos.getMinBlockX(), chunkpos.getMinBlockZ());
         NaturalSpawner.spawnMobsForChunkGeneration(level, biome, chunkpos, worldgenrandom);
@@ -162,4 +180,8 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
     }
 
     private record Settings(int baseHeight, float verticalVariance, float horizontalVariance) { }
+
+    @Override
+    public void addDebugScreenInfo(List<String> list, BlockPos pos) {
+    }
 }

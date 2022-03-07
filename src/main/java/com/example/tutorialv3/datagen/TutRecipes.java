@@ -2,6 +2,7 @@ package com.example.tutorialv3.datagen;
 
 import com.example.tutorialv3.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -44,7 +45,7 @@ public class TutRecipes extends RecipeProvider {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(Registration.MYSTERIOUS_ORE_ITEM),
                         Registration.MYSTERIOUS_INGOT.get(), 1.0f, 100)
-                .unlockedBy("has_ore", has(Registration.MYSTERIOUS_ORE_ITEM))
+                .unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(Registration.MYSTERIOUS_ORE_ITEM).build()))
                 .save(consumer, "mysterious_ingot1");
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(Registration.RAW_MYSTERIOUS_CHUNK.get()),

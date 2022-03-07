@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "tutorialv3:portal",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 1694767081,
+    "spacing": 8,
+    "separation": 4,
+    "type": "minecraft:random_spread"
+  }
+}
