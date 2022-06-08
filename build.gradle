@@ -120,9 +120,11 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     maven { // JEI
+        // "Just Enough Items" context: https://www.curseforge.com/minecraft/mc-mods/jei
         url "https://dvs1.progwml6.com/files/maven"
     }
     maven { // TOP
+        // The One Probe (TOP) context: https://www.curseforge.com/minecraft/mc-mods/the-one-probe
         url "https://cursemaven.com"
     }
 }
@@ -132,6 +134,7 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.12'
+
 
     compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
     implementation fg.deobf("mezz.jei:jei-${jei_version}")
