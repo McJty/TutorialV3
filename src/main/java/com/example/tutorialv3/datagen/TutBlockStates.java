@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static com.example.tutorialv3.client.GeneratorModelLoader.GENERATOR_LOADER;
 
@@ -37,12 +38,12 @@ public class TutBlockStates extends BlockStateProvider {
         Block block = Registration.PORTAL_BLOCK.get();
         ResourceLocation side = modLoc("block/portal_side");
         ResourceLocation top = modLoc("block/portal_top");
-        simpleBlock(block, models().cube(block.getRegistryName().getPath(), side, top, side, side, side, side));
+        simpleBlock(block, models().cube(ForgeRegistries.BLOCKS.getKey(block).getPath(), side, top, side, side, side, side));
     }
 
     private void registerGenerator() {
         // Using CustomLoaderBuilder we can define a json file for our model that will use our baked model
-        BlockModelBuilder generatorModel = models().getBuilder(Registration.GENERATOR.get().getRegistryName().getPath())
+        BlockModelBuilder generatorModel = models().getBuilder(ForgeRegistries.BLOCKS.getKey(Registration.GENERATOR.get()).getPath())
                 .parent(models().getExistingFile(mcLoc("cube")))
                 .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(GENERATOR_LOADER, blockModelBuilder, helper) { })
                 .end();

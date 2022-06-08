@@ -6,6 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TutItemModels extends ItemModelProvider {
 
@@ -15,21 +16,21 @@ public class TutItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        withExistingParent(Registration.MYSTERIOUS_ORE_OVERWORLD_ITEM.get().getRegistryName().getPath(), modLoc("block/mysterious_ore_overworld"));
-        withExistingParent(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get().getRegistryName().getPath(), modLoc("block/mysterious_ore_nether"));
-        withExistingParent(Registration.MYSTERIOUS_ORE_END_ITEM.get().getRegistryName().getPath(), modLoc("block/mysterious_ore_end"));
-        withExistingParent(Registration.MYSTERIOUS_ORE_DEEPSLATE_ITEM.get().getRegistryName().getPath(), modLoc("block/mysterious_ore_deepslate"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.MYSTERIOUS_ORE_OVERWORLD_ITEM.get()).getPath(), modLoc("block/mysterious_ore_overworld"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get()).getPath(), modLoc("block/mysterious_ore_nether"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.MYSTERIOUS_ORE_END_ITEM.get()).getPath(), modLoc("block/mysterious_ore_end"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.MYSTERIOUS_ORE_DEEPSLATE_ITEM.get()).getPath(), modLoc("block/mysterious_ore_deepslate"));
 
-        withExistingParent(Registration.GENERATOR_ITEM.get().getRegistryName().getPath(), modLoc("block/generator"));
-        withExistingParent(Registration.POWERGEN_ITEM.get().getRegistryName().getPath(), modLoc("block/powergen/main"));
-        withExistingParent(Registration.PORTAL_ITEM.get().getRegistryName().getPath(), modLoc("block/portal"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.GENERATOR_ITEM.get()).getPath(), modLoc("block/generator"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.POWERGEN_ITEM.get()).getPath(), modLoc("block/powergen/main"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.PORTAL_ITEM.get()).getPath(), modLoc("block/portal"));
 
-        withExistingParent(Registration.THIEF_EGG.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ForgeRegistries.ITEMS.getKey(Registration.THIEF_EGG.get()).getPath(), mcLoc("item/template_spawn_egg"));
 
-        singleTexture(Registration.RAW_MYSTERIOUS_CHUNK.get().getRegistryName().getPath(),
+        singleTexture(ForgeRegistries.ITEMS.getKey(Registration.RAW_MYSTERIOUS_CHUNK.get()).getPath(),
                 mcLoc("item/generated"),
                 "layer0", modLoc("item/raw_mysterious_chunk"));
-        singleTexture(Registration.MYSTERIOUS_INGOT.get().getRegistryName().getPath(),
+        singleTexture(ForgeRegistries.ITEMS.getKey(Registration.MYSTERIOUS_INGOT.get()).getPath(),
                 mcLoc("item/generated"),
                 "layer0", modLoc("item/mysterious_ingot"));
     }

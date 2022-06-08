@@ -17,6 +17,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -34,7 +35,14 @@ public class PowergenContainer extends AbstractContainerMenu {
 
         if (blockEntity != null) {
             blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 64, 24));
+                addSlot(new SlotItemHandler(h, 0, 64, 24) {
+                    // @todo 1.19, SlotItemHandler is not fully ported correctly yet. So for now this is needed
+                    @Override
+                    public void initialize(ItemStack stack) {
+                        ((IItemHandlerModifiable) this.getItemHandler()).setStackInSlot(0, stack);
+                        this.setChanged();
+                    }
+                });
             });
         }
         layoutPlayerInventorySlots(10, 70);
@@ -128,13 +136,21 @@ public class PowergenContainer extends AbstractContainerMenu {
 
 
 
-    private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
+    private int addSlotRange(IItemHandler handler, int idx, int x, int y, int amount, int dx) {
         for (int i = 0 ; i < amount ; i++) {
-            addSlot(new SlotItemHandler(handler, index, x, y));
+            int finalIdx = idx;
+            addSlot(new SlotItemHandler(handler, finalIdx, x, y) {
+                @Override
+                public void initialize(ItemStack stack) {
+                    // @todo 1.19, SlotItemHandler is not fully ported correctly yet. So for now this is needed
+                    ((IItemHandlerModifiable) this.getItemHandler()).setStackInSlot(finalIdx, stack);
+                    this.setChanged();
+                }
+            });
             x += dx;
-            index++;
+            idx++;
         }
-        return index;
+        return idx;
     }
 
     private int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {

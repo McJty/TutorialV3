@@ -31,7 +31,7 @@ public class ModSetup {
 
     public static void setup() {
         IEventBus bus = MinecraftForge.EVENT_BUS;
-        bus.addListener(Ores::onBiomeLoadingEvent);
+//        bus.addListener(Ores::onBiomeLoadingEvent);   // @todo 1.19
         bus.addGenericListener(Entity.class, ManaEvents::onAttachCapabilitiesPlayer);
         bus.addListener(ManaEvents::onPlayerCloned);
         bus.addListener(ManaEvents::onRegisterCapabilities);

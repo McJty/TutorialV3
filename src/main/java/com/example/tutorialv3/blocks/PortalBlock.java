@@ -27,7 +27,7 @@ public class PortalBlock extends Block {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(-1.0F, 3600000.0F)
-                .noDrops());
+                .noLootTable());
     }
 
     @Override

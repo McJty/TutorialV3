@@ -16,7 +16,6 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class Ores {
 
@@ -69,15 +68,16 @@ public class Ores {
         return PlacementUtils.register(registryName, Holder.direct(feature), placementModifiers);
     }
 
-    public static void onBiomeLoadingEvent(BiomeLoadingEvent event) {
-        if (event.getCategory() == Biome.BiomeCategory.NETHER) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NETHER_OREGEN);
-        } else if (event.getCategory() == Biome.BiomeCategory.THEEND) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, END_OREGEN);
-        } else {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MYSTERIOUS_OREGEN);
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OVERWORLD_OREGEN);
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, DEEPSLATE_OREGEN);
-        }
-    }
+    // @todo 1.19
+//    public static void onBiomeLoadingEvent(BiomeLoadingEvent event) {
+//        if (event.getCategory() == Biome.BiomeCategory.NETHER) {
+//            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NETHER_OREGEN);
+//        } else if (event.getCategory() == Biome.BiomeCategory.THEEND) {
+//            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, END_OREGEN);
+//        } else {
+//            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MYSTERIOUS_OREGEN);
+//            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OVERWORLD_OREGEN);
+//            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, DEEPSLATE_OREGEN);
+//        }
+//    }
 }

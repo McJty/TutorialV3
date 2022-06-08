@@ -13,7 +13,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -70,7 +68,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void buildSurface(WorldGenRegion region, StructureFeatureManager featureManager, ChunkAccess chunk) {
+    public void buildSurface(WorldGenRegion region, StructureManager featureManager, RandomState randomState, ChunkAccess chunk) {
         BlockState bedrock = Blocks.BEDROCK.defaultBlockState();
         BlockState stone = Blocks.STONE.defaultBlockState();
         ChunkPos chunkpos = chunk.getPos();
@@ -110,19 +108,19 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return CODEC;
     }
 
-    @Override
-    public ChunkGenerator withSeed(long seed) {
-        return new MysteriousChunkGenerator(getStructureSetRegistry(), getBiomeRegistry(), settings);
-    }
+//    @Override
+//    public ChunkGenerator withSeed(long seed) {
+//        return new MysteriousChunkGenerator(getStructureSetRegistry(), getBiomeRegistry(), settings);
+//    }
+
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager featureManager, ChunkAccess chunkAccess) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess) {
         return CompletableFuture.completedFuture(chunkAccess);
     }
 
-    // Make sure this is correctly implemented so that structures and features can use this
     @Override
-    public int getBaseHeight(int x, int z, Heightmap.Types types, LevelHeightAccessor levelHeightAccessor) {
+    public int getBaseHeight(int x, int z, Heightmap.Types types, LevelHeightAccessor levelHeightAccessor, RandomState randomState) {
         int baseHeight = settings.baseHeight();
         float verticalVariance = settings.verticalVariance();
         float horizontalVariance = settings.horizontalVariance();
@@ -130,9 +128,10 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
     }
 
     // Make sure this is correctly implemented so that structures and features can use this
+
     @Override
-    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor) {
-        int y = getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, levelHeightAccessor);
+    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor levelHeightAccessor, RandomState randomState) {
+        int y = getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, levelHeightAccessor, randomState);
         BlockState stone = Blocks.STONE.defaultBlockState();
         BlockState[] states = new BlockState[y];
         states[0] = Blocks.BEDROCK.defaultBlockState();
@@ -142,24 +141,23 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return new NoiseColumn(levelHeightAccessor.getMinBuildHeight(), states);
     }
 
-    // Carvers only work correctly in combination with NoiseBasedChunkGenerator so we keep this empty here
     @Override
-    public void applyCarvers(WorldGenRegion level, long seed, BiomeManager biomeManager,
-                             StructureFeatureManager featureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving) {
+    public void applyCarvers(WorldGenRegion level, long seed, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving) {
     }
 
-    @Override
-    public Climate.Sampler climateSampler() {
-        return new Climate.Sampler(DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0),
-                DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), Collections.emptyList());
-    }
+//
+//    @Override
+//    public Climate.Sampler climateSampler() {
+//        return new Climate.Sampler(DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), DensityFunctions.constant(0.0),
+//                DensityFunctions.constant(0.0), DensityFunctions.constant(0.0), Collections.emptyList());
+//    }
 
     // This makes sure passive mob spawning works for generated chunks. i.e. mobs that spawn during the creation of chunks themselves
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
         ChunkPos chunkpos = level.getCenter();
         Holder<Biome> biome = level.getBiome(chunkpos.getWorldPosition().atY(level.getMaxBuildHeight() - 1));
-        WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.seedUniquifier()));
+        WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.generateUniqueSeed()));
         worldgenrandom.setDecorationSeed(level.getSeed(), chunkpos.getMinBlockX(), chunkpos.getMinBlockZ());
         NaturalSpawner.spawnMobsForChunkGeneration(level, biome, chunkpos, worldgenrandom);
     }
@@ -182,6 +180,7 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
     private record Settings(int baseHeight, float verticalVariance, float horizontalVariance) { }
 
     @Override
-    public void addDebugScreenInfo(List<String> list, BlockPos pos) {
+    public void addDebugScreenInfo(List<String> list, RandomState randomState, BlockPos pos) {
+
     }
 }

@@ -1,0 +1,24 @@
+{
+  "type": "tutorialv3:thiefden",
+  "start_pool": "tutorialv3:thiefden/start_pool",
+  "size": 2,
+
+  // Maximum distance away from center that pieces can spawn. Cannot be greater than 128
+  "max_distance_from_center": 20,
+
+  // The generation step for when to generate the structure. there are 10 stages you can pick from!
+  // This surface structure stage places the structure before plants and ores are generated
+  // See GenerationStep.Feature enum for all the stages you can use and what order they are in
+  "step": "surface_structures",
+
+  "start_height": {
+    "absolute": 60
+  },
+
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+
+  "biomes": "#tutorialv3:has_structure/thiefden",
+  "adapt_noise": true,
+  "spawn_overrides": {
+  }
+}

@@ -3,9 +3,8 @@ package com.example.tutorialv3.manasystem.network;
 import com.example.tutorialv3.manasystem.data.ManaManager;
 import com.example.tutorialv3.manasystem.data.PlayerManaProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -31,7 +30,9 @@ public class PacketGatherMana {
             ServerPlayer player = ctx.getSender();
             int extracted = ManaManager.get(player.level).extractMana(player.blockPosition());
             if (extracted <= 0) {
-                player.sendMessage(new TranslatableComponent(MESSAGE_NO_MANA).withStyle(ChatFormatting.RED), Util.NIL_UUID);
+
+//                PlayerChatMessage message = PlayerChatMessage.signed(Component.translatable(MESSAGE_NO_MANA).withStyle(ChatFormatting.RED), )
+                player.sendSystemMessage(Component.translatable(MESSAGE_NO_MANA).withStyle(ChatFormatting.RED));
             } else {
                 player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
                     playerMana.addMana(extracted);
