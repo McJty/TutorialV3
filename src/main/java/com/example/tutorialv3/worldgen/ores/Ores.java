@@ -16,31 +16,21 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 
 public class Ores {
 
     public static final RuleTest IN_ENDSTONE = new TagMatchTest(Tags.Blocks.END_STONES);
 
-    public static Holder<PlacedFeature> MYSTERIOUS_OREGEN;
-    public static Holder<PlacedFeature> OVERWORLD_OREGEN;
+//    public static Holder<PlacedFeature> MYSTERIOUS_OREGEN;
+//    public static Holder<PlacedFeature> OVERWORLD_OREGEN;
     public static Holder<PlacedFeature> DEEPSLATE_OREGEN;
     public static Holder<PlacedFeature> NETHER_OREGEN;
     public static Holder<PlacedFeature> END_OREGEN;
 
     public static void registerConfiguredFeatures() {
-        OreConfiguration mysteriousConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.MYSTERIOUS_VEINSIZE.get());
-        MYSTERIOUS_OREGEN = registerPlacedFeature("mysterious_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, mysteriousConfig),
-                CountPlacement.of(OresConfig.MYSTERIOUS_AMOUNT.get()),
-                InSquarePlacement.spread(),
-                new DimensionBiomeFilter(key -> key.equals(Dimensions.MYSTERIOUS)),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
-
-        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.OVERWORLD_VEINSIZE.get());
-        OVERWORLD_OREGEN = registerPlacedFeature("overworld_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, overworldConfig),
-                CountPlacement.of(OresConfig.OVERWORLD_AMOUNT.get()),
-                InSquarePlacement.spread(),
-                new DimensionBiomeFilter(key -> !Dimensions.MYSTERIOUS.equals(key)),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
+//        MYSTERIOUS_OREGEN = createMysteriousOregen();
+//        OVERWORLD_OREGEN = createOverworldOregen();
 
         OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_DEEPSLATE.get().defaultBlockState(), OresConfig.DEEPSLATE_VEINSIZE.get());
         DEEPSLATE_OREGEN = registerPlacedFeature("deepslate_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, deepslateConfig),
@@ -62,6 +52,26 @@ public class Ores {
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100)));
+    }
+
+    @NotNull
+    public static Holder<PlacedFeature> createOverworldOregen() {
+        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.OVERWORLD_VEINSIZE.get());
+        return registerPlacedFeature("overworld_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, overworldConfig),
+                CountPlacement.of(OresConfig.OVERWORLD_AMOUNT.get()),
+                InSquarePlacement.spread(),
+                new DimensionBiomeFilter(key -> !Dimensions.MYSTERIOUS.equals(key)),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
+    }
+
+    @NotNull
+    public static Holder<PlacedFeature> createMysteriousOregen() {
+        OreConfiguration mysteriousConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.MYSTERIOUS_VEINSIZE.get());
+        return registerPlacedFeature("mysterious_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, mysteriousConfig),
+                CountPlacement.of(OresConfig.MYSTERIOUS_AMOUNT.get()),
+                InSquarePlacement.spread(),
+                new DimensionBiomeFilter(key -> key.equals(Dimensions.MYSTERIOUS)),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
     }
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> Holder<PlacedFeature> registerPlacedFeature(String registryName, ConfiguredFeature<C, F> feature, PlacementModifier... placementModifiers) {

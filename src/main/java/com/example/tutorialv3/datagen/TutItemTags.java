@@ -32,6 +32,6 @@ public class TutItemTags extends ItemTagsProvider {
 
     @Override
     public String getName() {
-        return "Tutorial Tags";
+        return "Tutorial Item Tags";
     }
 }

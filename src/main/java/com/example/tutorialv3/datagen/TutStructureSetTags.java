@@ -27,6 +27,6 @@ public class TutStructureSetTags extends TagsProvider<StructureSet> {
 
     @Override
     public String getName() {
-        return "Tutorial Tags";
+        return "Tutorial Set Tags";
     }
 }

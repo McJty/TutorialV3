@@ -19,7 +19,8 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(event.includeServer(), new TutItemTags(generator, blockTags, event.getExistingFileHelper()));
         generator.addProvider(event.includeServer(), new TutBiomeTags(generator, event.getExistingFileHelper()));
-        generator.addProvider(event.includeServer(), new TutStructureSetTags(generator, event.getExistingFileHelper()));
+//        generator.addProvider(event.includeServer(), new TutStructureSetTags(generator, event.getExistingFileHelper())); @todo 1.19
+        generator.addProvider(event.includeServer(), new TutBiomeModifiers(generator));
 
         generator.addProvider(event.includeClient(), new TutBlockStates(generator, event.getExistingFileHelper()));
         generator.addProvider(event.includeClient(), new TutItemModels(generator, event.getExistingFileHelper()));

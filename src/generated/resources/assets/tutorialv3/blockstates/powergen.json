@@ -6,113 +6,113 @@
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff"
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff",
         "x": 180
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff",
         "x": 90
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff",
         "x": 270
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff",
         "x": 90,
         "y": 90
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "false"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleoff",
         "x": 90,
         "y": 270
+      },
+      "when": {
+        "powered": "false"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon"
+      },
+      "when": {
+        "powered": "true"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon",
         "x": 180
+      },
+      "when": {
+        "powered": "true"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon",
         "x": 90
+      },
+      "when": {
+        "powered": "true"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon",
         "x": 270
+      },
+      "when": {
+        "powered": "true"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon",
         "x": 90,
         "y": 90
+      },
+      "when": {
+        "powered": "true"
       }
     },
     {
-      "when": {
-        "powered": "true"
-      },
       "apply": {
         "model": "tutorialv3:block/powergen/singleon",
         "x": 90,
         "y": 270
+      },
+      "when": {
+        "powered": "true"
       }
     }
   ]

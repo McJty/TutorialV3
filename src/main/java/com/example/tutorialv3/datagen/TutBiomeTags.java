@@ -26,6 +26,6 @@ public class TutBiomeTags extends TagsProvider<Biome> {
 
     @Override
     public String getName() {
-        return "Tutorial Tags";
+        return "Tutorial Biome Tags";
     }
 }

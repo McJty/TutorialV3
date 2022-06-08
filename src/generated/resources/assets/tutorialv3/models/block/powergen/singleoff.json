@@ -1,9 +1,11 @@
 {
-  "textures": {
-    "single": "tutorialv3:block/powergen_off"
-  },
   "elements": [
     {
+      "faces": {
+        "down": {
+          "texture": "#single"
+        }
+      },
       "from": [
         3,
         3,
@@ -13,12 +15,10 @@
         13,
         13,
         13
-      ],
-      "faces": {
-        "down": {
-          "texture": "#single"
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "single": "tutorialv3:block/powergen_off"
+  }
 }
