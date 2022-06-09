@@ -50,7 +50,6 @@ public class PowergenBlock extends Block implements EntityBlock {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter reader, BlockPos pos) {
         return RENDER_SHAPE;
@@ -94,7 +93,6 @@ public class PowergenBlock extends Block implements EntityBlock {
         return super.getStateForPlacement(context).setValue(BlockStateProperties.POWERED, false);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
         if (!level.isClientSide) {

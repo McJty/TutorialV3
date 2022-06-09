@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.0'
-group = 'com.mcjty.tutorialv3' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.lmatheson.tutorialv3' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'tutorialv3'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -146,12 +146,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Title"     : "tutorialmod1",
+                "Specification-Vendor"    : "adamanddad",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Vendor"   : "adamanddad",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
