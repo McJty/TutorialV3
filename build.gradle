@@ -57,7 +57,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                tutorialv3 {
                     source sourceSets.main
                 }
             }
@@ -79,7 +79,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                tutorialv3 {
                     source sourceSets.main
                 }
             }
@@ -104,7 +104,7 @@ minecraft {
             args '--mod', 'tutorialv3', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                tutorialv3 {
                     source sourceSets.main
                 }
             }
