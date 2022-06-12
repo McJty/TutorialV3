@@ -25,7 +25,9 @@ public class ModSetup {
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(Items.DIAMOND);
+            return new ItemStack(Items.ACACIA_BOAT); // LRN: Called when user tabs to it during inventory view first time in game
+                                                 // This is the icon that will be displayed on the tab.  Runs on RenderThread.
+                                                 // See CreativeModeInventoryScreen.render() in package net.minecraft.client.gui.screens.inventory;
         }
     };
 
