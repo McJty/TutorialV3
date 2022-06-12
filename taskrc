@@ -1,0 +1,11 @@
+# taskrc for mcjty.TutorialV3
+# vim: filetype=sh :
+
+# If someone does a raw "source taskrc", we ensure that $taskrc_dir gets defined anyway
+[[ -z $taskrc_dir && -f taskrc ]] && export taskrc_dir=$PWD
+
+type -t localhist_set >/dev/null && { localhist_set ${taskrc_dir}/bash_history;  echo "HISTFILE is $HISTFILE"; }
+
+PATH=${JAVA_HOME}/bin:$PATH
+
+
