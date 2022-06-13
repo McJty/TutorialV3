@@ -1,6 +1,0 @@
-{
-  "type": "tutorialv3:ore_biome_modifier",
-  "biomes": "#minecraft:is_overworld",
-  "features": "tutorialv3:overworld_mysterious_ore",
-  "generation_stage": "TOP_LAYER_MODIFICATION"
-}

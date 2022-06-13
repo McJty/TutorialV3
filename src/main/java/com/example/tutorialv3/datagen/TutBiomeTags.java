@@ -19,6 +19,7 @@ public class TutBiomeTags extends TagsProvider<Biome> {
     @Override
     protected void addTags() {
         ForgeRegistries.BIOMES.getValues().forEach(biome -> {
+            tag(Registration.HAS_ORE).add(biome);
             tag(Registration.HAS_PORTAL).add(biome);
             tag(Registration.HAS_THIEFDEN).add(biome);
         });
