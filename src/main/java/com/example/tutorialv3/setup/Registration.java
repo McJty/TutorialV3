@@ -4,6 +4,7 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.*;
 import com.example.tutorialv3.entities.ThiefEntity;
 import com.example.tutorialv3.worldgen.ores.OreBiomeModifier;
+import com.example.tutorialv3.worldgen.ores.Ores;
 import com.example.tutorialv3.worldgen.structures.PortalStructure;
 import com.example.tutorialv3.worldgen.structures.ThiefDenStructure;
 import com.mojang.serialization.Codec;
@@ -111,8 +112,8 @@ public class Registration {
 
 //    public static final RegistryObject<Codec<? extends BiomeModifier>> ORE_BIOME_MODIFIER_CODEC = RegistryObject.create(OreBiomeModifier.ORE_BIOME_MODIFIER, ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
     public static final RegistryObject<Codec<? extends BiomeModifier>> ORE_BIOME_MODIFIER = BIOME_MODIFIERS.register(ORE_BIOME_MODIFIER_NAME, OreBiomeModifier::makeCodec);
-//    public static final RegistryObject<PlacedFeature> ORE_OVERWORLD = PLACED_FEATURES.register("overworld_mysterious_ore", () -> Ores.createOverworldOregen().get());
-//    public static final RegistryObject<PlacedFeature> ORE_MYSTERIOUS = PLACED_FEATURES.register("mysterious_mysterious_ore", () -> Ores.createMysteriousOregen().get());
+    public static final RegistryObject<PlacedFeature> ORE_OVERWORLD = PLACED_FEATURES.register("overworld_mysterious_ore", () -> Ores.createOverworldOregen().get());
+    public static final RegistryObject<PlacedFeature> ORE_MYSTERIOUS = PLACED_FEATURES.register("mysterious_mysterious_ore", () -> Ores.createMysteriousOregen().get());
 
     // Conveniance function: Take a RegistryObject<Block> and make a corresponding RegistryObject<Item> from it
     public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {

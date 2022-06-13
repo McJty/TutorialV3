@@ -100,8 +100,11 @@ public class PortalStructure extends Structure {
         LevelHeightAccessor heightAccessor = context.heightAccessor();
 
         // Pick a random y location between a low and a high point
-        int y = blockpos.getY();
-        y = worldgenrandom.nextIntBetweenInclusive(heightAccessor.getMinBuildHeight()+20, y - 10);
+        int y = blockpos.getY() - 10;
+        int minY = heightAccessor.getMinBuildHeight() + 20;
+        if (y > minY) {
+            y = worldgenrandom.nextIntBetweenInclusive(minY, y);
+        }
 
         // Go down until we find a spot that has air. Then go down until we find a spot that is solid again
         NoiseColumn baseColumn = context.chunkGenerator().getBaseColumn(blockpos.getX(), blockpos.getZ(), heightAccessor, context.randomState());

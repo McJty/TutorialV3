@@ -16,7 +16,7 @@ import net.minecraftforge.common.world.ModifiableBiomeInfo;
 
 import static com.example.tutorialv3.TutorialV3.MODID;
 
-public record OreBiomeModifier(HolderSet<Biome> biomes, GenerationStep.Decoration generationStage,
+public record OreBiomeModifier(HolderSet<Biome> biomes,
                                HolderSet<PlacedFeature> features) implements BiomeModifier {
 
     public static final String ORE_BIOME_MODIFIER_NAME = "ore_biome_modifier";
@@ -26,7 +26,7 @@ public record OreBiomeModifier(HolderSet<Biome> biomes, GenerationStep.Decoratio
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && this.biomes.contains(biome)) {
             BiomeGenerationSettingsBuilder generation = builder.getGenerationSettings();
-            this.features.forEach(holder -> generation.addFeature(this.generationStage, holder));
+            this.features.forEach(holder -> generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, holder));
         }
     }
 
@@ -38,8 +38,7 @@ public record OreBiomeModifier(HolderSet<Biome> biomes, GenerationStep.Decoratio
     public static Codec<OreBiomeModifier> makeCodec() {
         return RecordCodecBuilder.create(builder -> builder.group(
                 Biome.LIST_CODEC.fieldOf("biomes").forGetter(OreBiomeModifier::biomes),
-                Codec.STRING.comapFlatMap(OreBiomeModifier::generationStageFromString, GenerationStep.Decoration::toString).fieldOf("generation_stage").forGetter(OreBiomeModifier::generationStage),
-                PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(OreBiomeModifier::features)
+                PlacedFeature.LIST_CODEC.fieldOf("feature").forGetter(OreBiomeModifier::features)
         ).apply(builder, OreBiomeModifier::new));
     }
 
