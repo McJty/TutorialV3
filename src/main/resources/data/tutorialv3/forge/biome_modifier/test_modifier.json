@@ -1,0 +1,4 @@
+{
+  "type": "tutorialv3:test_biome_modifier",
+  "biomes": "#minecraft:is_jungle"
+}

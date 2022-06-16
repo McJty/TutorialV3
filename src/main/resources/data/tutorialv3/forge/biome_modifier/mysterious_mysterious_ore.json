@@ -1,5 +1,6 @@
 {
-  "type": "tutorialv3:ore_biome_modifier",
+  "type": "forge:add_features",
   "biomes": "#tutorialv3:has_ore",
-  "feature": "tutorialv3:mysterious_mysterious_ore"
+  "features": "tutorialv3:mysterious_mysterious_ore",
+  "step": "underground_ores"
 }

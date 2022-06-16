@@ -3,7 +3,7 @@ package com.example.tutorialv3.setup;
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.*;
 import com.example.tutorialv3.entities.ThiefEntity;
-import com.example.tutorialv3.worldgen.ores.OreBiomeModifier;
+import com.example.tutorialv3.worldgen.ores.TestBiomeModifier;
 import com.example.tutorialv3.worldgen.ores.Ores;
 import com.example.tutorialv3.worldgen.structures.PortalStructure;
 import com.example.tutorialv3.worldgen.structures.ThiefDenStructure;
@@ -35,7 +35,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.example.tutorialv3.TutorialV3.MODID;
-import static com.example.tutorialv3.worldgen.ores.OreBiomeModifier.ORE_BIOME_MODIFIER_NAME;
+import static com.example.tutorialv3.worldgen.ores.TestBiomeModifier.TEST_BIOME_MODIFIER_NAME;
 
 public class Registration {
 
@@ -110,8 +110,8 @@ public class Registration {
     public static final TagKey<Biome> HAS_THIEFDEN = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/thiefden"));
     public static final TagKey<StructureSet> MYSTERIOUS_DIMENSION_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_MYSTERIOUS_DIMENSION_SET);
 
-//    public static final RegistryObject<Codec<? extends BiomeModifier>> ORE_BIOME_MODIFIER_CODEC = RegistryObject.create(OreBiomeModifier.ORE_BIOME_MODIFIER, ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
-    public static final RegistryObject<Codec<? extends BiomeModifier>> ORE_BIOME_MODIFIER = BIOME_MODIFIERS.register(ORE_BIOME_MODIFIER_NAME, OreBiomeModifier::makeCodec);
+    public static final RegistryObject<Codec<? extends BiomeModifier>> TEST_BIOME_MODIFIER = BIOME_MODIFIERS.register(TEST_BIOME_MODIFIER_NAME, TestBiomeModifier::makeCodec);
+
     public static final RegistryObject<PlacedFeature> ORE_OVERWORLD = PLACED_FEATURES.register("overworld_mysterious_ore", () -> Ores.createOverworldOregen().get());
     public static final RegistryObject<PlacedFeature> ORE_MYSTERIOUS = PLACED_FEATURES.register("mysterious_mysterious_ore", () -> Ores.createMysteriousOregen().get());
 
@@ -120,7 +120,7 @@ public class Registration {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), ITEM_PROPERTIES));
     }
 
-    // Helper method to register since compiler will complain about typing if we did () -> SkyStructures.CODEC directly.
+    // Helper method to register since compiler will complain about typing otherwise
     private static <S extends Structure> StructureType<S> typeConvert(Codec<S> codec) {
         return () -> codec;
     }
