@@ -3,8 +3,8 @@ package com.example.tutorialv3.setup;
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.*;
 import com.example.tutorialv3.entities.ThiefEntity;
-import com.example.tutorialv3.worldgen.ores.TestBiomeModifier;
 import com.example.tutorialv3.worldgen.ores.Ores;
+import com.example.tutorialv3.worldgen.ores.TestBiomeModifier;
 import com.example.tutorialv3.worldgen.structures.PortalStructure;
 import com.example.tutorialv3.worldgen.structures.ThiefDenStructure;
 import com.mojang.serialization.Codec;
@@ -105,7 +105,6 @@ public class Registration {
     public static final ResourceLocation RL_MYSTERIOUS_DIMENSION_SET = new ResourceLocation(TutorialV3.MODID, "mysterious_dimension_structure_set");
 
     public static final TagKey<Biome> HAS_ORE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_ore"));
-
     public static final TagKey<Biome> HAS_PORTAL = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/portal"));
     public static final TagKey<Biome> HAS_THIEFDEN = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/thiefden"));
     public static final TagKey<StructureSet> MYSTERIOUS_DIMENSION_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_MYSTERIOUS_DIMENSION_SET);

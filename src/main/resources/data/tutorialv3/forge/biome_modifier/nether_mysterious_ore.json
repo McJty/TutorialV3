@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "tutorialv3:nether_mysterious_ore",
+  "step": "underground_ores"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_end",
+  "features": "tutorialv3:end_mysterious_ore",
+  "step": "underground_ores"
+}
