@@ -18,6 +18,9 @@ public class TutBiomeTags extends TagsProvider<Biome> {
 
     @Override
     protected void addTags() {
+        // @todo add IS_OVERWORLD for example instead of individual biomes
+//        tag(Registration.HAS_ORE).add(biome);
+
         ForgeRegistries.BIOMES.getValues().forEach(biome -> {
             tag(Registration.HAS_ORE).add(biome);
             tag(Registration.HAS_PORTAL).add(biome);
