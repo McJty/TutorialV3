@@ -78,15 +78,13 @@ public class ThiefDenStructure extends Structure {
 
         BlockPos pos = context.chunkPos().getWorldPosition();
 
-        // Get height of land (stops at first non-air block)
-        int landHeight = context.chunkGenerator().getFirstOccupiedHeight(pos.getX(), pos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-
         // Grabs column of blocks at given position. In overworld, this column will be made of stone, water, and air.
         // In nether, it will be netherrack, lava, and air. End will only be endstone and air. It depends on what block
         // the chunk generator will place for that dimension.
         NoiseColumn columnOfBlocks = context.chunkGenerator().getBaseColumn(pos.getX(), pos.getZ(), context.heightAccessor(), context.randomState());
 
         // Combine the column of blocks with land height and you get the top block itself which you can test.
+        int landHeight = context.chunkGenerator().getFirstOccupiedHeight(pos.getX(), pos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
         BlockState topBlock = columnOfBlocks.getBlock(landHeight);
 
         // Now we test to make sure our structure is not spawning on water or other fluids.
@@ -96,7 +94,7 @@ public class ThiefDenStructure extends Structure {
         }
 
         ChunkPos chunkPos = context.chunkPos();
-        BlockPos blockPos = new BlockPos(chunkPos.getMinBlockX(), landHeight, chunkPos.getMinBlockZ());
+        BlockPos blockPos = new BlockPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ());  // We use 0 for y since the structure is automatically fitted
         Optional<Structure.GenerationStub> structurePiecesGenerator =
                 JigsawPlacement.addPieces(
                         context, // Used for JigsawPlacement to get all the proper behaviors done.
