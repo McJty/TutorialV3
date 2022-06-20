@@ -11,18 +11,16 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 public class Ores {
 
     @NotNull
     public static Holder<PlacedFeature> createOverworldOregen() {
-        OreConfiguration config = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.OVERWORLD_VEINSIZE.get());
+        // THIS BREAKS THE MOD!!!
+        OreConfiguration config = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), 5);
         return registerPlacedFeature("overworld_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, config),
-                CountPlacement.of(OresConfig.OVERWORLD_AMOUNT.get()),
+                CountPlacement.of(3),
                 InSquarePlacement.spread(),
                 new DimensionBiomeFilter(key -> !Dimensions.MYSTERIOUS.equals(key)),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
@@ -30,9 +28,9 @@ public class Ores {
 
     @NotNull
     public static Holder<PlacedFeature> createMysteriousOregen() {
-        OreConfiguration config = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), OresConfig.MYSTERIOUS_VEINSIZE.get());
+        OreConfiguration config = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.MYSTERIOUS_ORE_OVERWORLD.get().defaultBlockState(), 25);
         return registerPlacedFeature("mysterious_mysterious_ore", new ConfiguredFeature<>(Feature.ORE, config),
-                CountPlacement.of(OresConfig.MYSTERIOUS_AMOUNT.get()),
+                CountPlacement.of(10),
                 InSquarePlacement.spread(),
                 new DimensionBiomeFilter(key -> key.equals(Dimensions.MYSTERIOUS)),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
