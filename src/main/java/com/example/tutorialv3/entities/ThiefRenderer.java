@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nonnull;
 
 public class ThiefRenderer extends HumanoidMobRenderer<ThiefEntity, ThiefModel> {
-
     private static final ResourceLocation TEXTURE = new ResourceLocation(TutorialV3.MODID, "textures/entity/thief.png");
 
     public ThiefRenderer(EntityRendererProvider.Context context) {

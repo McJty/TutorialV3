@@ -4,11 +4,7 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.entities.ThiefEntity;
 import com.example.tutorialv3.manasystem.data.ManaEvents;
 import com.example.tutorialv3.worldgen.dimensions.Dimensions;
-<<<<<<< Updated upstream
-=======
-import com.example.tutorialv3.worldgen.ores.Ores;
 
->>>>>>> Stashed changes
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +19,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(modid = TutorialV3.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModSetup {
 
-    public static final String TAB_NAME = "tutorialv3";
+    public static final String TAB_NAME = TutorialV3.MODID;
 
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(TAB_NAME) {
         @Override

@@ -1,5 +1,7 @@
 package com.example.tutorialv3.worldgen.ores;
 
+import java.util.function.Predicate;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -10,9 +12,6 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
-
-import java.util.Random;
-import java.util.function.Predicate;
 
 /**
  * A biome filter that also checks if the dimension is right

@@ -1,5 +1,7 @@
 package com.example.tutorialv3.client;
 
+import static java.lang.Boolean.TRUE;
+
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.PowergenBE;
 import com.example.tutorialv3.blocks.PowergenConfig;
@@ -8,18 +10,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-
-import static java.lang.Boolean.TRUE;
 
 public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
 
@@ -28,7 +29,8 @@ public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
     public PowergenRenderer(BlockEntityRendererProvider.Context context) {
     }
 
-    @Override
+    @SuppressWarnings("resource")
+	@Override
     public void render(PowergenBE powergen, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 
         Boolean powered = powergen.getBlockState().getValue(BlockStateProperties.POWERED);
@@ -45,7 +47,7 @@ public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
         float scale = 0.1f + s * (float)(double)PowergenConfig.RENDER_SCALE.get();
 
         // Get our texture from the atlas
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(HALO);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(HALO);
 
         // Always remember to push the current transformation so that you can restore it later
         poseStack.pushPose();

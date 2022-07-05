@@ -13,13 +13,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThiefFindChestGoal extends MoveToBlockGoal {
 
    private final ThiefEntity thief;
    private final Random random = new Random();
 
-   private int stealingCounter = 20;
+   private AtomicInteger stealingCounter = new AtomicInteger(20);
 
    public ThiefFindChestGoal(ThiefEntity mob, double pSpeedModifier) {
       super(mob, pSpeedModifier, 16);
@@ -44,9 +45,9 @@ public class ThiefFindChestGoal extends MoveToBlockGoal {
          BlockEntity be = mob.level.getBlockEntity(blockPos);
          if (be instanceof ChestBlockEntity chest) {
             if (thief.isStealing()) {
-               stealingCounter--;
-               if (stealingCounter <= 0) {
-                  stealingCounter = 20;
+               stealingCounter.getAndDecrement();
+               if (stealingCounter.get() <= 0) {
+                  stealingCounter.getAndSet(20);
                   ItemStack stack = extractRandomItem(chest);
                   if (!stack.isEmpty()) {
                      Tools.spawnInWorld(mob.level, blockPos.above(), stack);
@@ -54,7 +55,7 @@ public class ThiefFindChestGoal extends MoveToBlockGoal {
                }
             } else {
                mob.level.blockEvent(blockPos, be.getBlockState().getBlock(), 1, 1);
-               stealingCounter = 20;
+               stealingCounter.getAndSet(20);
                thief.setStealing(true);
             }
          }

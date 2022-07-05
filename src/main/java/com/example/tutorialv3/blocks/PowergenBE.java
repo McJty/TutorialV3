@@ -1,10 +1,21 @@
 package com.example.tutorialv3.blocks;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.example.tutorialv3.setup.Registration;
 import com.example.tutorialv3.varia.CustomEnergyStorage;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -20,18 +31,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class PowergenBE extends BlockEntity {
+public class PowergenBE extends BlockEntity implements MenuProvider {
 
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
-    private final ItemStackHandler itemHandler = createHandler();
-    private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+    private LazyOptional<IEnergyStorage> energy = LazyOptional.empty();
+    private LazyOptional<IItemHandler> handler = LazyOptional.empty();
 
+    private final ItemStackHandler itemHandler = createHandler();
     private final CustomEnergyStorage energyStorage = createEnergy();
-    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
     private int counter;
 
@@ -39,7 +46,13 @@ public class PowergenBE extends BlockEntity {
         super(Registration.POWERGEN_BE.get(), pos, state);
     }
 
-
+    @Override
+    public void onLoad() {
+    	super.onLoad();
+    	this.handler = LazyOptional.of(() -> itemHandler);
+    	this.energy = LazyOptional.of(() -> energyStorage);
+    }
+    
     @Override
     public void setRemoved() {
         super.setRemoved();
@@ -112,6 +125,16 @@ public class PowergenBE extends BlockEntity {
         }
         super.load(tag);
     }
+    
+    @Override
+    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
+    	return new PowergenContainer(windowId, getBlockPos(), playerInventory, playerEntity);
+    }
+    
+    @Override
+    public Component getDisplayName() {
+    	return Component.translatable(PowergenBlock.SCREEN_TUTORIAL_POWERGEN);
+    }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
@@ -141,10 +164,7 @@ public class PowergenBE extends BlockEntity {
             @Nonnull
             @Override
             public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) <= 0) {
-                    return stack;
-                }
-                return super.insertItem(slot, stack, simulate);
+                return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) <= 0 ? stack : super.insertItem(slot, stack, simulate);
             }
         };
     }

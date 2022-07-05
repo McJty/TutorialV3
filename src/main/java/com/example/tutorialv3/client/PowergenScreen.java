@@ -25,7 +25,8 @@ public class PowergenScreen extends AbstractContainerScreen<PowergenContainer> {
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
-    @Override
+    @SuppressWarnings("resource")
+	@Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         drawString(matrixStack, Minecraft.getInstance().font, "Energy: " + menu.getEnergy(), 10, 10, 0xffffff);
     }

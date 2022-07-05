@@ -10,7 +10,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.resources.ResourceLocation;
 
 public class ThiefModel extends HumanoidModel<ThiefEntity> {
-
     public static final String BODY = "body";
 
     public static ModelLayerLocation THIEF_LAYER = new ModelLayerLocation(new ResourceLocation(TutorialV3.MODID, "thief"), BODY);
