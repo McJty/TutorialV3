@@ -2,8 +2,8 @@ package com.example.tutorialv3.datagen;
 
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.setup.Registration;
+
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;

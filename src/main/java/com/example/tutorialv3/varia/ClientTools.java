@@ -14,7 +14,7 @@ public class ClientTools {
     private static void putVertex(BakedQuadBuilder builder, Vector3f normal, Vector4f vector,
                                   float u, float v, TextureAtlasSprite sprite) {
 
-        var elements = builder.getVertexFormat().getElements().asList();
+        var elements = builder.getVertexFormat().getElements();
         for (int j = 0 ; j < elements.size() ; j++) {
             var e = elements.get(j);
             switch (e.getUsage()) {

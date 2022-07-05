@@ -1,5 +1,7 @@
 package com.example.tutorialv3.setup;
 
+import static net.minecraftforge.client.gui.ForgeIngameGui.HOTBAR_ELEMENT;
+
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.client.GeneratorModelLoader;
 import com.example.tutorialv3.client.PowergenRenderer;
@@ -9,10 +11,11 @@ import com.example.tutorialv3.entities.ThiefRenderer;
 import com.example.tutorialv3.manasystem.client.KeyBindings;
 import com.example.tutorialv3.manasystem.client.KeyInputHandler;
 import com.example.tutorialv3.manasystem.client.ManaOverlay;
+
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -23,8 +26,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-
-import static net.minecraftforge.client.gui.ForgeIngameGui.HOTBAR_ELEMENT;
 
 @Mod.EventBusSubscriber(modid = TutorialV3.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
@@ -57,7 +58,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+        if (!event.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
             return;
         }
         event.addSprite(PowergenRenderer.HALO);

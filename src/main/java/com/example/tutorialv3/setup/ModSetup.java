@@ -4,6 +4,11 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.entities.ThiefEntity;
 import com.example.tutorialv3.manasystem.data.ManaEvents;
 import com.example.tutorialv3.worldgen.dimensions.Dimensions;
+<<<<<<< Updated upstream
+=======
+import com.example.tutorialv3.worldgen.ores.Ores;
+
+>>>>>>> Stashed changes
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
