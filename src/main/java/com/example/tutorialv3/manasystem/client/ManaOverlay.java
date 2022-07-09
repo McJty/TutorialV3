@@ -1,11 +1,12 @@
 package com.example.tutorialv3.manasystem.client;
 
 import com.example.tutorialv3.manasystem.ManaConfig;
-import net.minecraftforge.client.gui.IIngameOverlay;
+
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class ManaOverlay {
 
-    public static final IIngameOverlay HUD_MANA = (gui, poseStack, partialTicks, width, height) -> {
+    public static final IGuiOverlay HUD_MANA = (gui, poseStack, partialTicks, width, height) -> {
         String toDisplay = ClientManaData.getPlayerMana() + " / " + ClientManaData.getChunkMana();
         int x = ManaConfig.MANA_HUD_X.get();
         int y = ManaConfig.MANA_HUD_Y.get();

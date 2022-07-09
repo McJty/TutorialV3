@@ -12,10 +12,11 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class TutBiomeTags extends TagsProvider<Biome> {
 
-    public TutBiomeTags(DataGenerator generator, ExistingFileHelper helper) {
+    @SuppressWarnings("deprecation")
+	public TutBiomeTags(DataGenerator generator, ExistingFileHelper helper) {
         super(generator, BuiltinRegistries.BIOME, TutorialV3.MODID, helper);//, TagManager.getTagDir(BuiltinRegistries.BIOME.key()).substring(5));
     }
-
+    
     @Override
     protected void addTags() {
         tag(Registration.HAS_ORE).add(TagEntry.tag(BiomeTags.IS_OVERWORLD.location()));

@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
-public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
+public class AvoidEntityAndEscapeGoal<T extends LivingEntity> extends Goal {
    protected final PathfinderMob mob;
    private final double walkSpeedModifier;
    private final double sprintSpeedModifier;
@@ -31,7 +31,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    /**
     * Goal that helps mobs avoid mobs of a specific class
     */
-   public AvoidEntityGoalNoCombat(PathfinderMob pMob, Class<T> entityClassToAvoid, float maxDistance, double walkSpeedModifier, double sprintSpeedModifier) {
+   public AvoidEntityAndEscapeGoal(PathfinderMob pMob, Class<T> entityClassToAvoid, float maxDistance, double walkSpeedModifier, double sprintSpeedModifier) {
       this.mob = pMob;
       this.avoidClass = entityClassToAvoid;
       this.maxDist = maxDistance;

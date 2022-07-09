@@ -1,18 +1,12 @@
 package com.example.tutorialv3.datagen;
 
+import java.io.IOException;
+
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
-import java.io.IOException;
-
-public class TutBiomeModifiers implements DataProvider {
-
-    private final DataGenerator generator;
-
-    public TutBiomeModifiers(DataGenerator generator) {
-        this.generator = generator;
-    }
+public record TutBiomeModifiers(DataGenerator generator) implements DataProvider {
 
     @Override
     public void run(CachedOutput cache) throws IOException {

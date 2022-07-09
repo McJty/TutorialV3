@@ -1,8 +1,17 @@
 package com.example.tutorialv3.blocks;
 
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.example.tutorialv3.setup.Registration;
 import com.example.tutorialv3.varia.CustomEnergyStorage;
 import com.example.tutorialv3.varia.Tools;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,9 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
@@ -29,12 +36,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
 
 public class GeneratorBE extends BlockEntity {
 
@@ -279,7 +280,7 @@ public class GeneratorBE extends BlockEntity {
         if (oldGenerating != generating || oldCollecting != collecting ||
                 oldActuallyGenerating != actuallyGenerating ||
                 !Objects.equals(generatingBlock, oldGeneratingBlock)) {
-            ModelDataManager.requestModelDataRefresh(this);
+            level.getModelDataManager().requestRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
@@ -293,14 +294,13 @@ public class GeneratorBE extends BlockEntity {
         energyHandler.invalidate();
     }
 
-    @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder()
-                .withInitial(GENERATING_BLOCK, generatingBlock)
-                .withInitial(GENERATING, generating)
-                .withInitial(ACTUALLY_GENERATING, actuallyGenerating)
-                .withInitial(COLLECTING, collecting)
+    public @NotNull ModelData getModelData() {
+        return ModelData.builder()
+                .with(GENERATING_BLOCK, generatingBlock)
+                .with(GENERATING, generating)
+                .with(ACTUALLY_GENERATING, actuallyGenerating)
+                .with(COLLECTING, collecting)
                 .build();
     }
 
