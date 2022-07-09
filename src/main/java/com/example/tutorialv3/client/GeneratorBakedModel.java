@@ -1,13 +1,26 @@
 package com.example.tutorialv3.client;
 
+import static java.lang.Boolean.TRUE;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
+
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.GeneratorBE;
 import com.example.tutorialv3.blocks.GeneratorBlock;
-import com.example.tutorialv3.varia.ClientTools;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -20,24 +33,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.QuadTransformer;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.IDynamicBakedModel;
+import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-
-import static com.example.tutorialv3.varia.ClientTools.v;
-import static java.lang.Boolean.TRUE;
-
-public class GeneratorBakedModel implements IDynamicBakedModel {
+public class GeneratorBakedModel implements IDynamicBakedModel, BakedModel {
 
     private final ModelState modelState;
     private final Function<Material, TextureAtlasSprite> spriteGetter;
@@ -77,27 +78,26 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
      * @param extraData this represents the data that is given to use from our block entity
      * @return a list of quads
      */
-    @Nonnull
+    
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData) {
-
-        // Are we on the solid render type and are we rendering for side == null
-        RenderType layer = MinecraftForgeClient.getRenderType();
+    public @NotNull List<BakedQuad> getQuads(@org.jetbrains.annotations.Nullable BlockState state,
+    		@org.jetbrains.annotations.Nullable Direction side, @NotNull RandomSource rand,
+    		@NotNull ModelData extraData, @org.jetbrains.annotations.Nullable RenderType layer) {
         if (side != null || (layer != null && !layer.equals(RenderType.solid()))) {
             return Collections.emptyList();
         }
 
         // Get the data from our block entity
-        boolean generating = TRUE == extraData.getData(GeneratorBE.GENERATING);
-        boolean collecting = TRUE == extraData.getData(GeneratorBE.COLLECTING);
-        boolean actuallyGenerating = TRUE == extraData.getData(GeneratorBE.ACTUALLY_GENERATING);
+        boolean generating = TRUE == extraData.has(GeneratorBE.GENERATING);
+        boolean collecting = TRUE == extraData.has(GeneratorBE.COLLECTING);
+        boolean actuallyGenerating = TRUE == extraData.has(GeneratorBE.ACTUALLY_GENERATING);
 
         // Generate the quads from the block (ore) that we are generating
         var quads = getQuadsForGeneratingBlock(state, rand, extraData, layer);
 
         // ModelKey represents a unique configuration. We can use this to get our cached quads
         ModelKey key = new ModelKey(generating, collecting, actuallyGenerating, modelState);
-        quads.addAll(quadCache.get(key));
+        //quads.addAll(quadCache.get(key));
 
         return quads;
     }
@@ -138,53 +138,53 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
         TextureAtlasSprite textureOff = spriteGetter.apply(GeneratorModelLoader.MATERIAL_OFF);
 
         // The base
-        quads.add(ClientTools.createQuad(v(r, p, r), v(r, p, l), v(l, p, l), v(l, p, r), rotation, actuallyGenerating ? textureFrontPowered : textureFront));      // Top side
-        quads.add(ClientTools.createQuad(v(l, l, l), v(r, l, l), v(r, l, r), v(l, l, r), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(r, p, r), v(r, l, r), v(r, l, l), v(r, p, l), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(l, p, l), v(l, l, l), v(l, l, r), v(l, p, r), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(r, p, l), v(r, l, l), v(l, l, l), v(l, p, l), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(l, p, r), v(l, l, r), v(r, l, r), v(r, p, r), rotation, textureSide));
-
-        // The collecting button
-        float s = collecting ? 14f/16f : r;
-        float offset = 0;
-        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, s, bl+offset), v(bl, s, bl+offset), v(bl, s, br+offset), rotation, collecting ? textureOn : textureOff));
-        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, p, br+offset), v(br, p, bl+offset), v(br, s, bl+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(bl, s, bl+offset), v(bl, p, bl+offset), v(bl, p, br+offset), v(bl, s, br+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(br, s, bl+offset), v(br, p, bl+offset), v(bl, p, bl+offset), v(bl, s, bl+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(bl, s, br+offset), v(bl, p, br+offset), v(br, p, br+offset), v(br, s, br+offset), rotation, textureSide));
-
-        // The generating button
-        s = generating ? 14f/16f : r;
-        offset = h;
-        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, s, bl+offset), v(bl, s, bl+offset), v(bl, s, br+offset), rotation, generating ? textureOn : textureOff));
-        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, p, br+offset), v(br, p, bl+offset), v(br, s, bl+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(bl, s, bl+offset), v(bl, p, bl+offset), v(bl, p, br+offset), v(bl, s, br+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(br, s, bl+offset), v(br, p, bl+offset), v(bl, p, bl+offset), v(bl, s, bl+offset), rotation, textureSide));
-        quads.add(ClientTools.createQuad(v(bl, s, br+offset), v(bl, p, br+offset), v(br, p, br+offset), v(br, s, br+offset), rotation, textureSide));
+        //quads.add(ClientTools.createQuad(v(r, p, r), v(r, p, l), v(l, p, l), v(l, p, r), rotation, actuallyGenerating ? textureFrontPowered : textureFront));      // Top side
+        //quads.add(ClientTools.createQuad(v(l, l, l), v(r, l, l), v(r, l, r), v(l, l, r), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(r, p, r), v(r, l, r), v(r, l, l), v(r, p, l), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(l, p, l), v(l, l, l), v(l, l, r), v(l, p, r), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(r, p, l), v(r, l, l), v(l, l, l), v(l, p, l), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(l, p, r), v(l, l, r), v(r, l, r), v(r, p, r), rotation, textureSide));
+//
+//        // The collecting button
+//        float s = collecting ? 14f/16f : r;
+//        float offset = 0;
+//        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, s, bl+offset), v(bl, s, bl+offset), v(bl, s, br+offset), rotation, collecting ? textureOn : textureOff));
+//        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, p, br+offset), v(br, p, bl+offset), v(br, s, bl+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(bl, s, bl+offset), v(bl, p, bl+offset), v(bl, p, br+offset), v(bl, s, br+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(br, s, bl+offset), v(br, p, bl+offset), v(bl, p, bl+offset), v(bl, s, bl+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(bl, s, br+offset), v(bl, p, br+offset), v(br, p, br+offset), v(br, s, br+offset), rotation, textureSide));
+//
+//        // The generating button
+//        s = generating ? 14f/16f : r;
+//        offset = h;
+//        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, s, bl+offset), v(bl, s, bl+offset), v(bl, s, br+offset), rotation, generating ? textureOn : textureOff));
+//        quads.add(ClientTools.createQuad(v(br, s, br+offset), v(br, p, br+offset), v(br, p, bl+offset), v(br, s, bl+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(bl, s, bl+offset), v(bl, p, bl+offset), v(bl, p, br+offset), v(bl, s, br+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(br, s, bl+offset), v(br, p, bl+offset), v(bl, p, bl+offset), v(bl, s, bl+offset), rotation, textureSide));
+//        quads.add(ClientTools.createQuad(v(bl, s, br+offset), v(bl, p, br+offset), v(br, p, br+offset), v(br, s, br+offset), rotation, textureSide));
         return quads;
     }
 
     /**
      * Get the quads from the block we are generating.
      */
-    private List<BakedQuad> getQuadsForGeneratingBlock(@Nullable BlockState state, @NotNull RandomSource rand, @NotNull IModelData extraData, RenderType layer) {
+    private List<BakedQuad> getQuadsForGeneratingBlock(@Nullable BlockState state, @NotNull RandomSource rand, @NotNull ModelData extraData, RenderType layer) {
         var quads = new ArrayList<BakedQuad>();
-        BlockState generatingBlock = extraData.getData(GeneratorBE.GENERATING_BLOCK);
+        BlockState generatingBlock = extraData.get(GeneratorBE.GENERATING_BLOCK);
         if (generatingBlock != null && !(generatingBlock.getBlock() instanceof GeneratorBlock)) {
-            if (layer == null || ItemBlockRenderTypes.canRenderInLayer(generatingBlock, layer)) {
+            if (layer == null || getRenderTypes(state, rand, extraData).contains(layer)) {
                 BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(generatingBlock);
                 try {
                     Direction facing = state == null ? Direction.SOUTH : state.getValue(BlockStateProperties.FACING);
                     Transformation rotation = modelState.getRotation();
                     Transformation translate = transformGeneratingBlock(facing, rotation);
-                    QuadTransformer transformer = new QuadTransformer(translate);
+                    IQuadTransformer transformer = IQuadTransformer.applying(translate);
 
                     // Get the quads for every side, transform it and add it to the list of quads
                     for (Direction s : Direction.values()) {
-                        List<BakedQuad> modelQuads = model.getQuads(generatingBlock, s, rand, EmptyModelData.INSTANCE);
+                        List<BakedQuad> modelQuads = model.getQuads(generatingBlock, s, rand, ModelData.EMPTY, layer);
                         for (BakedQuad quad : modelQuads) {
-                            quads.add(transformer.processOne(quad));
+                            quads.add(transformer.process(quad));
                         }
                     }
                 } catch (Exception e) {

@@ -1,25 +1,30 @@
 package com.example.tutorialv3.client;
 
-import com.example.tutorialv3.TutorialV3;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class GeneratorModelLoader implements IModelLoader<GeneratorModelLoader.GeneratorModelGeometry> {
+import com.example.tutorialv3.TutorialV3;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.mojang.datafixers.util.Pair;
+
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
+
+public class GeneratorModelLoader implements IGeometryLoader<GeneratorModelLoader.GeneratorModelGeometry> {
 
     public static final ResourceLocation GENERATOR_LOADER = new ResourceLocation(TutorialV3.MODID, "generatorloader");
 
@@ -36,24 +41,23 @@ public class GeneratorModelLoader implements IModelLoader<GeneratorModelLoader.G
     public static final Material MATERIAL_OFF = ForgeHooksClient.getBlockMaterial(GENERATOR_OFF);
 
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager) {
-    }
-
-    @Override
-    public GeneratorModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+    public GeneratorModelGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
         return new GeneratorModelGeometry();
     }
 
     
-    public static class GeneratorModelGeometry implements IModelGeometry<GeneratorModelGeometry> {
-
-        @Override
-        public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
-            return new GeneratorBakedModel(modelTransform, spriteGetter, overrides, owner.getCameraTransforms());
+    public static class GeneratorModelGeometry implements IUnbakedGeometry<GeneratorModelGeometry> {
+    	
+    	@Override
+    	public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery,
+    			Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides,
+    			ResourceLocation modelLocation) {
+            return new GeneratorBakedModel(modelState, spriteGetter, overrides, context.getTransforms());
         }
 
-        @Override
-        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+    	@Override
+    	public Collection<Material> getMaterials(IGeometryBakingContext context,
+    			Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
             return List.of(MATERIAL_FRONT, MATERIAL_FRONT_POWERED, MATERIAL_SIDE, MATERIAL_ON, MATERIAL_OFF);
         }
     }

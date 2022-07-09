@@ -1,7 +1,5 @@
 package com.example.tutorialv3.setup;
 
-import static net.minecraftforge.client.gui.ForgeIngameGui.HOTBAR_ELEMENT;
-
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.client.GeneratorModelLoader;
 import com.example.tutorialv3.client.PowergenRenderer;
@@ -18,10 +16,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.gui.OverlayRegistry;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,17 +33,22 @@ public class ClientSetup {
     public static void init(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(Registration.POWERGEN_CONTAINER.get(), PowergenScreen::new);
-            ItemBlockRenderTypes.setRenderLayer(Registration.POWERGEN.get(), RenderType.translucent());
+            // @todo move to json
+//            ItemBlockRenderTypes.setRenderLayer(Registration.POWERGEN.get(), RenderType.translucent());
             PowergenRenderer.register();
         });
         MinecraftForge.EVENT_BUS.addListener(KeyInputHandler::onKeyInput);
-        KeyBindings.init();
-        OverlayRegistry.registerOverlayAbove(HOTBAR_ELEMENT, "name", ManaOverlay.HUD_MANA);
+//        GuiOverlayManager.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "name", ManaOverlay.HUD_MANA);
     }
 
     @SubscribeEvent
-    public static void onModelRegistryEvent(ModelRegistryEvent event) {
-        ModelLoaderRegistry.registerLoader(GeneratorModelLoader.GENERATOR_LOADER, new GeneratorModelLoader());
+    public static void onRegisterOverlays(RegisterGuiOverlaysEvent event) {
+        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "name", ManaOverlay.HUD_MANA);
+    }
+    
+    @SubscribeEvent
+    public static void onModelRegistryEvent(ModelEvent.RegisterGeometryLoaders event) {
+        event.register(GeneratorModelLoader.GENERATOR_LOADER.toString(), new GeneratorModelLoader());
     }
 
     @SubscribeEvent

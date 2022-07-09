@@ -1,13 +1,10 @@
 package com.example.tutorialv3.entities;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -18,10 +15,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
-public class ThiefEntity extends Animal {
+public class ThiefEntity extends PathfinderMob {
 	private boolean stealing = false;
 
-	public ThiefEntity(EntityType<? extends Animal> type, Level worldIn) {
+	public ThiefEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -32,12 +29,6 @@ public class ThiefEntity extends Animal {
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
 		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-	}
-
-	@Nullable
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-		return null;
 	}
 
 	@Override
@@ -66,7 +57,7 @@ public class ThiefEntity extends Animal {
 	}
 
 	public static AttributeSupplier.Builder prepareAttributes() {
-		return LivingEntity.createLivingAttributes()
+		return Mob.createMobAttributes()
 				.add(Attributes.ATTACK_DAMAGE, 3.0)
 				.add(Attributes.MAX_HEALTH, 20.0)
 				.add(Attributes.FOLLOW_RANGE, 40.0)
