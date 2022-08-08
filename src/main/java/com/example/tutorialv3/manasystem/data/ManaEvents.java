@@ -23,7 +23,7 @@ public class ManaEvents {
         if (event.isWasDeath()) {
             // We need to copyFrom the capabilities
             event.getOriginal().getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(oldStore -> {
-                event.getPlayer().getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(newStore -> {
+                event.getEntity().getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -34,15 +34,15 @@ public class ManaEvents {
         event.register(PlayerMana.class);
     }
 
-    public static void onWorldTick(TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(TickEvent.LevelTickEvent event) {
         // Don't do anything client side
-        if (event.world.isClientSide) {
+        if (event.level.isClientSide) {
             return;
         }
         if (event.phase == TickEvent.Phase.START) {
             return;
         }
-        ManaManager manager = ManaManager.get(event.world);
-        manager.tick(event.world);
+        ManaManager manager = ManaManager.get(event.level);
+        manager.tick(event.level);
     }
 }

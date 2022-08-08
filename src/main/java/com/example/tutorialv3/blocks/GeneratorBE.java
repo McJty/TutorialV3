@@ -15,9 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
@@ -279,7 +277,7 @@ public class GeneratorBE extends BlockEntity {
         if (oldGenerating != generating || oldCollecting != collecting ||
                 oldActuallyGenerating != actuallyGenerating ||
                 !Objects.equals(generatingBlock, oldGeneratingBlock)) {
-            ModelDataManager.requestModelDataRefresh(this);
+            requestModelDataUpdate();
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
@@ -295,12 +293,12 @@ public class GeneratorBE extends BlockEntity {
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder()
-                .withInitial(GENERATING_BLOCK, generatingBlock)
-                .withInitial(GENERATING, generating)
-                .withInitial(ACTUALLY_GENERATING, actuallyGenerating)
-                .withInitial(COLLECTING, collecting)
+    public ModelData getModelData() {
+        return ModelData.builder()
+                .with(GENERATING_BLOCK, generatingBlock)
+                .with(GENERATING, generating)
+                .with(ACTUALLY_GENERATING, actuallyGenerating)
+                .with(COLLECTING, collecting)
                 .build();
     }
 

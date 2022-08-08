@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    protected final PathfinderMob mob;
    private final double walkSpeedModifier;

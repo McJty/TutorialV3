@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 100,
+  "experience": 0.0,
   "ingredient": {
     "item": "tutorialv3:raw_mysterious_chunk"
   },
-  "result": "tutorialv3:mysterious_ingot",
-  "experience": 0.0,
-  "cookingtime": 100
+  "result": "tutorialv3:mysterious_ingot"
 }

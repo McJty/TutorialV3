@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "minecraft:the_void",
     "minecraft:plains",
@@ -8,6 +7,7 @@
     "minecraft:ice_spikes",
     "minecraft:desert",
     "minecraft:swamp",
+    "minecraft:mangrove_swamp",
     "minecraft:forest",
     "minecraft:flower_forest",
     "minecraft:birch_forest",
@@ -52,6 +52,7 @@
     "minecraft:mushroom_fields",
     "minecraft:dripstone_caves",
     "minecraft:lush_caves",
+    "minecraft:deep_dark",
     "minecraft:nether_wastes",
     "minecraft:warped_forest",
     "minecraft:crimson_forest",

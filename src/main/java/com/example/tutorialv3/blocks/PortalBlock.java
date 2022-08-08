@@ -17,6 +17,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class PortalBlock extends Block {
 
     // Our block is lower then a normal block. That causes the player to sink in it when he stands on the block
@@ -27,7 +29,7 @@ public class PortalBlock extends Block {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(-1.0F, 3600000.0F)
-                .noDrops());
+                .noLootTable());
     }
 
     @Override

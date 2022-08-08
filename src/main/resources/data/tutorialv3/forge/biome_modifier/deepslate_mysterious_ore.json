@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#tutorialv3:has_ore",
+  "features": "tutorialv3:deepslate_mysterious_ore",
+  "step": "underground_ores"
+}

@@ -1,10 +1,9 @@
 package com.example.tutorialv3;
 
+import com.example.tutorialv3.setup.ClientSetup;
 import com.example.tutorialv3.setup.Config;
 import com.example.tutorialv3.setup.ModSetup;
-import com.example.tutorialv3.setup.ClientSetup;
 import com.example.tutorialv3.setup.Registration;
-import com.example.tutorialv3.worldgen.ores.Ores;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;

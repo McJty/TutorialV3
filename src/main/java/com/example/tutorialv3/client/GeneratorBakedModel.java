@@ -7,7 +7,6 @@ import com.example.tutorialv3.varia.ClientTools;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -17,13 +16,15 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.QuadTransformer;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.IDynamicBakedModel;
+import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.QuadTransformers;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,18 +78,17 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
      */
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType layer) {
 
         // Are we on the solid render type and are we rendering for side == null
-        RenderType layer = MinecraftForgeClient.getRenderType();
         if (side != null || (layer != null && !layer.equals(RenderType.solid()))) {
             return Collections.emptyList();
         }
 
         // Get the data from our block entity
-        boolean generating = TRUE == extraData.getData(GeneratorBE.GENERATING);
-        boolean collecting = TRUE == extraData.getData(GeneratorBE.COLLECTING);
-        boolean actuallyGenerating = TRUE == extraData.getData(GeneratorBE.ACTUALLY_GENERATING);
+        boolean generating = TRUE == extraData.get(GeneratorBE.GENERATING);
+        boolean collecting = TRUE == extraData.get(GeneratorBE.COLLECTING);
+        boolean actuallyGenerating = TRUE == extraData.get(GeneratorBE.ACTUALLY_GENERATING);
 
         // Generate the quads from the block (ore) that we are generating
         var quads = getQuadsForGeneratingBlock(state, rand, extraData, layer);
@@ -166,28 +166,29 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
     /**
      * Get the quads from the block we are generating.
      */
-    private List<BakedQuad> getQuadsForGeneratingBlock(@Nullable BlockState state, @NotNull Random rand, @NotNull IModelData extraData, RenderType layer) {
+    private List<BakedQuad> getQuadsForGeneratingBlock(@Nullable BlockState state, @NotNull RandomSource rand, @NotNull ModelData extraData, RenderType layer) {
         var quads = new ArrayList<BakedQuad>();
-        BlockState generatingBlock = extraData.getData(GeneratorBE.GENERATING_BLOCK);
+        BlockState generatingBlock = extraData.get(GeneratorBE.GENERATING_BLOCK);
         if (generatingBlock != null && !(generatingBlock.getBlock() instanceof GeneratorBlock)) {
-            if (layer == null || ItemBlockRenderTypes.canRenderInLayer(generatingBlock, layer)) {
+            if (layer == null || getRenderTypes(generatingBlock, rand, extraData).contains(layer)) {
                 BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(generatingBlock);
                 try {
                     Direction facing = state == null ? Direction.SOUTH : state.getValue(BlockStateProperties.FACING);
                     Transformation rotation = modelState.getRotation();
                     Transformation translate = transformGeneratingBlock(facing, rotation);
-                    QuadTransformer transformer = new QuadTransformer(translate);
+                    IQuadTransformer transformer = QuadTransformers.applying(translate);
 
                     // Get the quads for every side, transform it and add it to the list of quads
                     for (Direction s : Direction.values()) {
-                        List<BakedQuad> modelQuads = model.getQuads(generatingBlock, s, rand, EmptyModelData.INSTANCE);
+                        List<BakedQuad> modelQuads = model.getQuads(generatingBlock, s, rand, ModelData.EMPTY, layer);
                         for (BakedQuad quad : modelQuads) {
-                            quads.add(transformer.processOne(quad));
+                            quads.add(transformer.process(quad));
                         }
                     }
                 } catch (Exception e) {
                     // In case a certain mod has a bug we don't want to cause everything to crash. Instead we log the problem
-                    TutorialV3.LOGGER.log(Level.ERROR, "A block '" + generatingBlock.getBlock().getRegistryName().toString() + "' caused a crash!");
+                    ResourceLocation key = ForgeRegistries.BLOCKS.getKey(generatingBlock.getBlock());
+                    TutorialV3.LOGGER.log(Level.ERROR, "A block '" + key.toString() + "' caused a crash!");
                 }
             }
         }

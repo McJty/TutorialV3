@@ -3,8 +3,11 @@ package com.example.tutorialv3.setup;
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.*;
 import com.example.tutorialv3.entities.ThiefEntity;
+import com.example.tutorialv3.worldgen.ores.Ores;
+import com.example.tutorialv3.worldgen.ores.TestBiomeModifier;
 import com.example.tutorialv3.worldgen.structures.PortalStructure;
 import com.example.tutorialv3.worldgen.structures.ThiefDenStructure;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -17,12 +20,14 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,15 +35,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.example.tutorialv3.TutorialV3.MODID;
+import static com.example.tutorialv3.worldgen.ores.TestBiomeModifier.TEST_BIOME_MODIFIER_NAME;
 
 public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
-    private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
-    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
-    private static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
+    private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
+    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
+    private static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
+    private static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, MODID);
+    private static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, MODID);
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -48,6 +56,8 @@ public class Registration {
         CONTAINERS.register(bus);
         ENTITIES.register(bus);
         STRUCTURES.register(bus);
+        BIOME_MODIFIERS.register(bus);
+        PLACED_FEATURES.register(bus);
     }
 
     // Some common properties for our blocks and items
@@ -90,10 +100,16 @@ public class Registration {
             .build("thief"));
     public static final RegistryObject<Item> THIEF_EGG = ITEMS.register("thief", () -> new ForgeSpawnEggItem(THIEF, 0xff0000, 0x00ff00, ITEM_PROPERTIES));
 
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> THIEFDEN = STRUCTURES.register("thiefden", ThiefDenStructure::new);
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> PORTAL = STRUCTURES.register("portal", PortalStructure::new);
+    public static final RegistryObject<StructureType<?>> THIEFDEN = STRUCTURES.register("thiefden", () -> typeConvert(ThiefDenStructure.CODEC));
+    public static final RegistryObject<StructureType<?>> PORTAL = STRUCTURES.register("portal", () -> typeConvert(PortalStructure.CODEC));
     public static final ResourceLocation RL_MYSTERIOUS_DIMENSION_SET = new ResourceLocation(TutorialV3.MODID, "mysterious_dimension_structure_set");
 
+    public static final RegistryObject<Codec<? extends BiomeModifier>> TEST_BIOME_MODIFIER = BIOME_MODIFIERS.register(TEST_BIOME_MODIFIER_NAME, TestBiomeModifier::makeCodec);
+
+    public static final RegistryObject<PlacedFeature> ORE_OVERWORLD = PLACED_FEATURES.register("overworld_mysterious_ore", Ores::createOverworldOregen);
+    public static final RegistryObject<PlacedFeature> ORE_MYSTERIOUS = PLACED_FEATURES.register("mysterious_mysterious_ore", Ores::createMysteriousOregen);
+
+    public static final TagKey<Biome> HAS_ORE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_ore"));
     public static final TagKey<Biome> HAS_PORTAL = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/portal"));
     public static final TagKey<Biome> HAS_THIEFDEN = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/thiefden"));
     public static final TagKey<StructureSet> MYSTERIOUS_DIMENSION_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_MYSTERIOUS_DIMENSION_SET);
@@ -101,5 +117,10 @@ public class Registration {
     // Conveniance function: Take a RegistryObject<Block> and make a corresponding RegistryObject<Item> from it
     public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), ITEM_PROPERTIES));
+    }
+
+    // Helper method to register since compiler will complain about typing otherwise
+    private static <S extends Structure> StructureType<S> typeConvert(Codec<S> codec) {
+        return () -> codec;
     }
 }

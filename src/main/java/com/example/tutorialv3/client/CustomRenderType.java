@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
 
+import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
+import net.minecraft.client.renderer.RenderType.CompositeState;
+
 public class CustomRenderType extends RenderType {
 
     // Dummy

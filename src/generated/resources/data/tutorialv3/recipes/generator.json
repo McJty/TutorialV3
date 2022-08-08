@@ -1,22 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "tutorialv3",
-  "pattern": [
-    "mxm",
-    "x#x",
-    "#x#"
-  ],
   "key": {
-    "x": {
-      "tag": "forge:gems/diamond"
-    },
     "#": {
       "tag": "forge:ingots/iron"
     },
     "m": {
       "item": "tutorialv3:mysterious_ingot"
+    },
+    "x": {
+      "tag": "forge:gems/diamond"
     }
   },
+  "pattern": [
+    "mxm",
+    "x#x",
+    "#x#"
+  ],
   "result": {
     "item": "tutorialv3:generator"
   }

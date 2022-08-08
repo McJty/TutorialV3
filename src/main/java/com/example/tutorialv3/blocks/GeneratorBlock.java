@@ -4,7 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +54,7 @@ public class GeneratorBlock extends Block implements EntityBlock {
 
     @Override
     public void appendHoverText(ItemStack stack, @javax.annotation.Nullable BlockGetter reader, List<Component> list, TooltipFlag flags) {
-        list.add(new TranslatableComponent(MESSAGE_GENERATOR).withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable(MESSAGE_GENERATOR).withStyle(ChatFormatting.BLUE));
     }
 
     @Override

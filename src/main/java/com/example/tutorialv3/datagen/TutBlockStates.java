@@ -37,12 +37,12 @@ public class TutBlockStates extends BlockStateProvider {
         Block block = Registration.PORTAL_BLOCK.get();
         ResourceLocation side = modLoc("block/portal_side");
         ResourceLocation top = modLoc("block/portal_top");
-        simpleBlock(block, models().cube(block.getRegistryName().getPath(), side, top, side, side, side, side));
+        simpleBlock(block, models().cube(Registration.PORTAL_BLOCK.getId().getPath(), side, top, side, side, side, side));
     }
 
     private void registerGenerator() {
         // Using CustomLoaderBuilder we can define a json file for our model that will use our baked model
-        BlockModelBuilder generatorModel = models().getBuilder(Registration.GENERATOR.get().getRegistryName().getPath())
+        BlockModelBuilder generatorModel = models().getBuilder(Registration.GENERATOR.getId().getPath())
                 .parent(models().getExistingFile(mcLoc("cube")))
                 .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(GENERATOR_LOADER, blockModelBuilder, helper) { })
                 .end();
@@ -72,6 +72,8 @@ public class TutBlockStates extends BlockStateProvider {
 
         frame.texture("window", modLoc("block/powergen_window"));
         frame.texture("particle", modLoc("block/powergen_off"));
+
+        frame.renderType("translucent");
 
         createPowergenModel(Registration.POWERGEN.get(), frame);
     }

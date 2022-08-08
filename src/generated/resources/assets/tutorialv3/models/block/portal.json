@@ -2,10 +2,10 @@
   "parent": "minecraft:block/cube",
   "textures": {
     "down": "tutorialv3:block/portal_side",
-    "up": "tutorialv3:block/portal_top",
+    "east": "tutorialv3:block/portal_side",
     "north": "tutorialv3:block/portal_side",
     "south": "tutorialv3:block/portal_side",
-    "east": "tutorialv3:block/portal_side",
+    "up": "tutorialv3:block/portal_top",
     "west": "tutorialv3:block/portal_side"
   }
 }

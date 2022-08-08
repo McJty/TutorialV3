@@ -3,6 +3,7 @@ package com.example.tutorialv3.worldgen.ores;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -25,7 +26,7 @@ public class DimensionBiomeFilter extends PlacementFilter {
     }
 
     @Override
-    protected boolean shouldPlace(PlacementContext context, Random random, BlockPos pos) {
+    protected boolean shouldPlace(PlacementContext context, RandomSource random, BlockPos pos) {
         if (levelTest.test(context.getLevel().getLevel().dimension())) {
             PlacedFeature placedfeature = context.topFeature().orElseThrow(() -> new IllegalStateException("Tried to biome check an unregistered feature"));
             Holder<Biome> biome = context.getLevel().getBiome(pos);
