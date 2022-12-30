@@ -3,7 +3,7 @@ package com.example.tutorialv3.datagen;
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.setup.Registration;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,8 +17,8 @@ import static com.example.tutorialv3.client.GeneratorModelLoader.GENERATOR_LOADE
 
 public class TutBlockStates extends BlockStateProvider {
 
-    public TutBlockStates(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, TutorialV3.MODID, helper);
+    public TutBlockStates(PackOutput packOutput, ExistingFileHelper helper) {
+        super(packOutput, TutorialV3.MODID, helper);
     }
 
     @Override

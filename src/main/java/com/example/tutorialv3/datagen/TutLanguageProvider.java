@@ -4,7 +4,7 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.manasystem.client.KeyBindings;
 import com.example.tutorialv3.manasystem.network.PacketGatherMana;
 import com.example.tutorialv3.setup.Registration;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import static com.example.tutorialv3.blocks.GeneratorBlock.MESSAGE_GENERATOR;
@@ -14,8 +14,8 @@ import static com.example.tutorialv3.setup.ModSetup.TAB_NAME;
 
 public class TutLanguageProvider extends LanguageProvider {
 
-    public TutLanguageProvider(DataGenerator gen, String locale) {
-        super(gen, TutorialV3.MODID, locale);
+    public TutLanguageProvider(PackOutput packOutput, String locale) {
+        super(packOutput, TutorialV3.MODID, locale);
     }
 
     @Override

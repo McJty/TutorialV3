@@ -5,6 +5,7 @@ import com.example.tutorialv3.varia.CustomEnergyStorage;
 import com.example.tutorialv3.varia.Tools;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
@@ -342,7 +343,7 @@ public class GeneratorBE extends BlockEntity {
             generating = infoTag.getBoolean("generating");
             collecting = infoTag.getBoolean("collecting");
             if (infoTag.contains("block")) {
-                generatingBlock = NbtUtils.readBlockState(infoTag.getCompound("block"));
+                generatingBlock = NbtUtils.readBlockState(level.holderLookup(Registries.BLOCK), infoTag.getCompound("block"));
             }
         }
         actuallyGenerating = tag.getBoolean("actuallyGenerating");

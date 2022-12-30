@@ -6,8 +6,6 @@ import com.example.tutorialv3.blocks.PowergenConfig;
 import com.example.tutorialv3.setup.Registration;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,6 +16,8 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 import static java.lang.Boolean.TRUE;
 
@@ -54,7 +54,7 @@ public class PowergenRenderer implements BlockEntityRenderer<PowergenBE> {
         poseStack.translate(0.5, 1.5, 0.5);
 
         // Use the orientation of the main camera to make sure the single quad that we are going to render always faces the camera
-        Quaternion rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
+        Quaternionf rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
         poseStack.mulPose(rotation);
 
         // Actually render the quad in our own custom render type

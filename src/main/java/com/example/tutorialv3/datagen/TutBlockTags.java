@@ -2,20 +2,23 @@ package com.example.tutorialv3.datagen;
 
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.setup.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 public class TutBlockTags extends BlockTagsProvider {
 
-    public TutBlockTags(DataGenerator generator, ExistingFileHelper helper) {
-        super(generator, TutorialV3.MODID, helper);
+    public TutBlockTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper helper) {
+        super(packOutput, lookupProvider, TutorialV3.MODID, helper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider pProvider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(Registration.GENERATOR.get())
                 .add(Registration.POWERGEN.get())
@@ -45,6 +48,6 @@ public class TutBlockTags extends BlockTagsProvider {
 
     @Override
     public String getName() {
-        return "Tutorial Tags";
+        return "Tutorial Block Tags";
     }
 }

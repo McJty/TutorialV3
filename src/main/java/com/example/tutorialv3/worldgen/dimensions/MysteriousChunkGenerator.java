@@ -5,8 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.TagKey;
@@ -37,20 +38,21 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
 
     public static final Codec<MysteriousChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    RegistryOps.retrieveRegistry(Registry.STRUCTURE_SET_REGISTRY).forGetter(MysteriousChunkGenerator::getStructureSetRegistry),
-                    RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(MysteriousChunkGenerator::getBiomeRegistry),
+//                    RegistryOps.retrieveRegistryLookup(Registries.STRUCTURE_SET).forGetter(MysteriousChunkGenerator::getStructureSetRegistry),
+                    RegistryOps.retrieveRegistryLookup(Registries.BIOME).forGetter(MysteriousChunkGenerator::getBiomeRegistry),
                     SETTINGS_CODEC.fieldOf("settings").forGetter(MysteriousChunkGenerator::getTutorialSettings)
             ).apply(instance, MysteriousChunkGenerator::new));
 
     private final Settings settings;
 
-    public MysteriousChunkGenerator(Registry<StructureSet> structureSetRegistry, Registry<Biome> registry, Settings settings) {
-        super(structureSetRegistry, getSet(structureSetRegistry), new MysteriousBiomeProvider(registry));
+    public MysteriousChunkGenerator(HolderLookup.RegistryLookup<Biome> registry, Settings settings) {
+//        super(structureSetRegistry, getSet(structureSetRegistry), new MysteriousBiomeProvider(registry));
+        super(new MysteriousBiomeProvider(registry));
         this.settings = settings;
     }
 
-    private static Optional<HolderSet<StructureSet>> getSet(Registry<StructureSet> structureSetRegistry) {
-        HolderSet.Named<StructureSet> structureSet = structureSetRegistry.getOrCreateTag(TagKey.create(Registry.STRUCTURE_SET_REGISTRY,
+    private static Optional<HolderSet<StructureSet>> getSet(HolderLookup.RegistryLookup<StructureSet> structureSetRegistry) {
+        HolderSet.Named<StructureSet> structureSet = structureSetRegistry.getOrThrow(TagKey.create(Registries.STRUCTURE_SET,
                 Registration.RL_MYSTERIOUS_DIMENSION_SET));
         return Optional.of(structureSet);
     }
@@ -59,12 +61,8 @@ public class MysteriousChunkGenerator extends ChunkGenerator {
         return settings;
     }
 
-    public Registry<Biome> getBiomeRegistry() {
+    public HolderLookup.RegistryLookup<Biome> getBiomeRegistry() {
         return ((MysteriousBiomeProvider)biomeSource).getBiomeRegistry();
-    }
-
-    public Registry<StructureSet> getStructureSetRegistry() {
-        return structureSets;
     }
 
     @Override

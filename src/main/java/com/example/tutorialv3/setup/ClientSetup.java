@@ -10,11 +10,11 @@ import com.example.tutorialv3.manasystem.client.KeyBindings;
 import com.example.tutorialv3.manasystem.client.KeyInputHandler;
 import com.example.tutorialv3.manasystem.client.ManaOverlay;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,11 +57,12 @@ public class ClientSetup {
         event.registerEntityRenderer(Registration.THIEF.get(), ThiefRenderer::new);
     }
 
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            return;
-        }
-        event.addSprite(PowergenRenderer.HALO);
-    }
+    // @todo 1.19.3
+//    @SubscribeEvent
+//    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+//        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+//            return;
+//        }
+//        event.addSprite(PowergenRenderer.HALO);
+//    }
 }

@@ -2,20 +2,23 @@ package com.example.tutorialv3.datagen;
 
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.setup.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 public class TutItemTags extends ItemTagsProvider {
 
-    public TutItemTags(DataGenerator generator, BlockTagsProvider blockTags, ExistingFileHelper helper) {
-        super(generator, blockTags, TutorialV3.MODID, helper);
+    public TutItemTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider blockTags, ExistingFileHelper helper) {
+        super(packOutput, lookupProvider, blockTags, TutorialV3.MODID, helper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider pProvider) {
         tag(Tags.Items.ORES)
                 .add(Registration.MYSTERIOUS_ORE_OVERWORLD_ITEM.get())
                 .add(Registration.MYSTERIOUS_ORE_NETHER_ITEM.get())
@@ -32,6 +35,6 @@ public class TutItemTags extends ItemTagsProvider {
 
     @Override
     public String getName() {
-        return "Tutorial Tags";
+        return "Tutorial Item Tags";
     }
 }

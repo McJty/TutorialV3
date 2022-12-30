@@ -3,12 +3,15 @@ package com.example.tutorialv3.setup;
 import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.*;
 import com.example.tutorialv3.entities.ThiefEntity;
-import com.example.tutorialv3.worldgen.ores.Ores;
+import com.example.tutorialv3.worldgen.dimensions.MysteriousBiomeProvider;
+import com.example.tutorialv3.worldgen.dimensions.MysteriousChunkGenerator;
+import com.example.tutorialv3.worldgen.ores.DimensionBiomeFilter;
 import com.example.tutorialv3.worldgen.ores.TestBiomeModifier;
 import com.example.tutorialv3.worldgen.structures.PortalStructure;
 import com.example.tutorialv3.worldgen.structures.ThiefDenStructure;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -16,11 +19,15 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -45,8 +52,10 @@ public class Registration {
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
     private static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
-    private static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, MODID);
-    private static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, MODID);
+    private static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registries.STRUCTURE_TYPE, MODID);
+    private static final DeferredRegister<Codec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, MODID);
+    private static final DeferredRegister<Codec<? extends BiomeSource>> BIOME_SOURCES = DeferredRegister.create(Registries.BIOME_SOURCE, MODID);
+    private static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS = DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, MODID);
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -57,12 +66,14 @@ public class Registration {
         ENTITIES.register(bus);
         STRUCTURES.register(bus);
         BIOME_MODIFIERS.register(bus);
-        PLACED_FEATURES.register(bus);
+        CHUNK_GENERATORS.register(bus);
+        BIOME_SOURCES.register(bus);
+        PLACEMENT_MODIFIERS.register(bus);
     }
 
     // Some common properties for our blocks and items
     public static final BlockBehaviour.Properties BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f).requiresCorrectToolForDrops();
-    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(ModSetup.ITEM_GROUP);
+    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties(); // @todo 1.19.3 .tab(ModSetup.ITEM_GROUP);
 
     public static final RegistryObject<Block> MYSTERIOUS_ORE_OVERWORLD = BLOCKS.register("mysterious_ore_overworld", () -> new Block(BLOCK_PROPERTIES));
     public static final RegistryObject<Item> MYSTERIOUS_ORE_OVERWORLD_ITEM = fromBlock(MYSTERIOUS_ORE_OVERWORLD);
@@ -90,8 +101,8 @@ public class Registration {
     public static final RegistryObject<Item> RAW_MYSTERIOUS_CHUNK = ITEMS.register("raw_mysterious_chunk", () -> new Item(ITEM_PROPERTIES));
     public static final RegistryObject<Item> MYSTERIOUS_INGOT = ITEMS.register("mysterious_ingot", () -> new Item(ITEM_PROPERTIES));
 
-    public static final TagKey<Block> MYSTERIOUS_ORE = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(TutorialV3.MODID, "mysterious_ore"));
-    public static final TagKey<Item> MYSTERIOUS_ORE_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(TutorialV3.MODID, "mysterious_ore"));
+    public static final TagKey<Block> MYSTERIOUS_ORE = TagKey.create(Registries.BLOCK, new ResourceLocation(TutorialV3.MODID, "mysterious_ore"));
+    public static final TagKey<Item> MYSTERIOUS_ORE_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(TutorialV3.MODID, "mysterious_ore"));
 
     public static final RegistryObject<EntityType<ThiefEntity>> THIEF = ENTITIES.register("thief", () -> EntityType.Builder.of(ThiefEntity::new, MobCategory.CREATURE)
             .sized(0.6f, 1.95f)
@@ -106,13 +117,19 @@ public class Registration {
 
     public static final RegistryObject<Codec<? extends BiomeModifier>> TEST_BIOME_MODIFIER = BIOME_MODIFIERS.register(TEST_BIOME_MODIFIER_NAME, TestBiomeModifier::makeCodec);
 
-    public static final RegistryObject<PlacedFeature> ORE_OVERWORLD = PLACED_FEATURES.register("overworld_mysterious_ore", Ores::createOverworldOregen);
-    public static final RegistryObject<PlacedFeature> ORE_MYSTERIOUS = PLACED_FEATURES.register("mysterious_mysterious_ore", Ores::createMysteriousOregen);
+    public static final TagKey<Biome> HAS_ORE = TagKey.create(Registries.BIOME, new ResourceLocation(TutorialV3.MODID, "has_ore"));
+    public static final TagKey<Biome> HAS_PORTAL = TagKey.create(Registries.BIOME, new ResourceLocation(TutorialV3.MODID, "has_structure/portal"));
+    public static final TagKey<Biome> HAS_THIEFDEN = TagKey.create(Registries.BIOME, new ResourceLocation(TutorialV3.MODID, "has_structure/thiefden"));
+    public static final TagKey<StructureSet> MYSTERIOUS_DIMENSION_STRUCTURE_SET = TagKey.create(Registries.STRUCTURE_SET, RL_MYSTERIOUS_DIMENSION_SET);
 
-    public static final TagKey<Biome> HAS_ORE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_ore"));
-    public static final TagKey<Biome> HAS_PORTAL = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/portal"));
-    public static final TagKey<Biome> HAS_THIEFDEN = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(TutorialV3.MODID, "has_structure/thiefden"));
-    public static final TagKey<StructureSet> MYSTERIOUS_DIMENSION_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_MYSTERIOUS_DIMENSION_SET);
+    public static final ResourceKey<Level> MYSTERIOUS = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "mysterious"));
+
+    public static final RegistryObject<Codec<? extends ChunkGenerator>> MYSTERIOUS_CHUNKGEN = CHUNK_GENERATORS.register("mysterious_chunkgen", () -> MysteriousChunkGenerator.CODEC);
+    public static final RegistryObject<Codec<? extends BiomeSource>> MYSTERIOUS_BIOMESOURCE = BIOME_SOURCES.register("biomes", () -> MysteriousBiomeProvider.CODEC);
+    public static final RegistryObject<PlacementModifierType<?>> FILTER_OVERWORLD = PLACEMENT_MODIFIERS.register("filter_overworld",
+            () -> (PlacementModifierType<PlacementModifier>) () -> DimensionBiomeFilter.CODEC_OVERWORLD);
+    public static final RegistryObject<PlacementModifierType<?>> FILTER_MYSTERIOUS = PLACEMENT_MODIFIERS.register("filter_mysterious",
+            () -> (PlacementModifierType<PlacementModifier>) () -> DimensionBiomeFilter.CODEC_MYSTERIOUS);
 
     // Conveniance function: Take a RegistryObject<Block> and make a corresponding RegistryObject<Item> from it
     public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {

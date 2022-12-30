@@ -1,7 +1,7 @@
 package com.example.tutorialv3.blocks;
 
+import com.example.tutorialv3.setup.Registration;
 import com.example.tutorialv3.varia.Tools;
-import com.example.tutorialv3.worldgen.dimensions.Dimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -16,8 +16,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class PortalBlock extends Block {
 
@@ -41,10 +39,10 @@ public class PortalBlock extends Block {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof ServerPlayer player) {
-            if (level.dimension().equals(Dimensions.MYSTERIOUS)) {
+            if (level.dimension().equals(Registration.MYSTERIOUS)) {
                 teleportTo(player, pos.north(), Level.OVERWORLD);
             } else {
-                teleportTo(player, pos.north(), Dimensions.MYSTERIOUS);
+                teleportTo(player, pos.north(), Registration.MYSTERIOUS);
             }
         }
     }

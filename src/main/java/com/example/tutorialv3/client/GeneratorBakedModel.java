@@ -4,7 +4,6 @@ import com.example.tutorialv3.TutorialV3;
 import com.example.tutorialv3.blocks.GeneratorBE;
 import com.example.tutorialv3.blocks.GeneratorBlock;
 import com.example.tutorialv3.varia.ClientTools;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -27,6 +26,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -228,15 +228,15 @@ public class GeneratorBakedModel implements IDynamicBakedModel {
 
         // As the final step (remember, read from end to start) we position our correctly rotated and scaled
         // block to the top-left corner of our main block
-        Transformation translate = new Transformation(Matrix4f.createTranslateMatrix(stepX, stepY, stepZ));
+        Transformation translate = new Transformation(new Matrix4f().translation(stepX, stepY, stepZ));
 
         // Now our block is correctly positioned where we want to rotate and scale it
-        translate = translate.compose(new Transformation(Matrix4f.createScaleMatrix(.2f, .2f, .2f)));
+        translate = translate.compose(new Transformation(new Matrix4f().scale(.2f, .2f, .2f)));
         translate = translate.compose(rotation);    // The rotation from our main model
 
         // This will happen first: translate our subblock so it's center is at 0,0,0. That way scaling and rotating will be correct and
         // not change the position
-        translate = translate.compose(new Transformation(Matrix4f.createTranslateMatrix(-.5f, -.5f, -.5f)));
+        translate = translate.compose(new Transformation(new Matrix4f().translation(-.5f, -.5f, -.5f)));
         return translate;
     }
 
