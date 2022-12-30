@@ -48,6 +48,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
     * method as well.
     */
+   @Override
    public boolean canUse() {
       List<T> entitiesOfClass = this.mob.level.getEntitiesOfClass(this.avoidClass, this.mob.getBoundingBox().inflate(this.maxDist, 3.0D, this.maxDist), (ent) -> true);
       this.toAvoid = this.mob.level.getNearestEntity(entitiesOfClass, this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
@@ -69,6 +70,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    /**
     * Returns whether an in-progress EntityAIBase should continue executing
     */
+   @Override
    public boolean canContinueToUse() {
       return !this.pathNav.isDone();
    }
@@ -76,6 +78,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    /**
     * Execute a one shot task or start executing a continuous task
     */
+   @Override
    public void start() {
       this.pathNav.moveTo(this.path, this.walkSpeedModifier);
    }
@@ -83,6 +86,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    /**
     * Reset the task's internal state. Called when this task is interrupted by another one
     */
+   @Override
    public void stop() {
       this.toAvoid = null;
    }
@@ -90,6 +94,7 @@ public class AvoidEntityGoalNoCombat<T extends LivingEntity> extends Goal {
    /**
     * Keep ticking a continuous task that has already been started
     */
+   @Override
    public void tick() {
       if (this.mob.distanceToSqr(this.toAvoid) < 49.0D) {
          this.mob.getNavigation().setSpeedModifier(this.sprintSpeedModifier);

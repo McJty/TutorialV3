@@ -32,12 +32,12 @@ public class Messages {
         net.messageBuilder(PacketGatherMana.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(PacketGatherMana::new)
                 .encoder(PacketGatherMana::toBytes)
-                .consumer(PacketGatherMana::handle)
+                .consumerMainThread(PacketGatherMana::handle)
                 .add();
         net.messageBuilder(PacketSyncManaToClient.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(PacketSyncManaToClient::new)
                 .encoder(PacketSyncManaToClient::toBytes)
-                .consumer(PacketSyncManaToClient::handle)
+                .consumerMainThread(PacketSyncManaToClient::handle)
                 .add();
     }
 

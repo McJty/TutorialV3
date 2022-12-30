@@ -27,7 +27,6 @@ public class ClientSetup {
     public static void init(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(Registration.POWERGEN_CONTAINER.get(), PowergenScreen::new);
-//            ItemBlockRenderTypes.setRenderLayer(Registration.POWERGEN.get(), RenderType.translucent());
             PowergenRenderer.register();
         });
         MinecraftForge.EVENT_BUS.addListener(KeyInputHandler::onKeyInput);

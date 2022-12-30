@@ -24,7 +24,7 @@ public record TestBiomeModifier(HolderSet<Biome> biomes) implements BiomeModifie
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && this.biomes.contains(biome)) {
-            builder.getEffects().ambientParticle(new AmbientParticleSettings(new SculkChargeParticleOptions(1.0f), 1.0f));
+            builder.getSpecialEffects().ambientParticle(new AmbientParticleSettings(new SculkChargeParticleOptions(1.0f), 1.0f));
         }
     }
 

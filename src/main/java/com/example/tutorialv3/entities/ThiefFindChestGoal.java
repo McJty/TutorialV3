@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import java.util.Random;
 
@@ -62,7 +62,7 @@ public class ThiefFindChestGoal extends MoveToBlockGoal {
    }
 
    private ItemStack extractRandomItem(BlockEntity e) {
-      return e.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).map(handler -> {
+      return e.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).map(handler -> {
          for (int i = 0 ; i < handler.getSlots() ; i++) {
             ItemStack stack = handler.getStackInSlot(i);
             if (!stack.isEmpty()) {
